@@ -1,0 +1,53 @@
+{
+	"devices": {
+		"main_temp_sensor_1": {
+			"type": "temperature_sensor",
+			"i2c_address": ""
+		},
+		"light_sensor_1": {
+			"type": "light_sensor",
+			"i2c_address": ""
+		},
+		"light_sensor_2": {
+			"type": "light_sensor",
+			"i2c_address": ""
+		},
+		"soil_sensor_1": {
+			"type": "soil_sensor",
+			"i2c_address": ""
+		},
+		"soil_sensor_2": {
+			"type": "soil_sensor",
+			"i2c_address": ""
+		},
+		"water_pump": {
+			"type": "water",
+			"relay_id": 0
+		},
+		"light_1": {
+			"type": "light",
+			"relay_id": 0
+		},
+		"light_2": {
+			"type": "light",
+			"relay_id": 0
+		},
+		"camera_1": {
+			"type": "camera",
+			"usb_id": 0
+		},
+		"camera_2": {
+			"type": "camera",
+			"usb_id": 1
+		},
+		"relay_module": {
+			"type": "relay",
+			"relay_module_length": 8,
+			"relay_devices": {
+				"water_pump": 1,
+				"light_1": 2,
+				"light_2": 3
+			}
+		}
+	}
+}

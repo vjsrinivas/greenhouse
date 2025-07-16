@@ -2,52 +2,50 @@
 	"devices": {
 		"main_temp_sensor_1": {
 			"type": "temperature_sensor",
-			"i2c_address": ""
+			"i2c_address": "0x44"
 		},
 		"light_sensor_1": {
 			"type": "light_sensor",
-			"i2c_address": ""
+			"i2c_address": "0x29"
 		},
 		"light_sensor_2": {
 			"type": "light_sensor",
-			"i2c_address": ""
+			"i2c_address": "0x29"
 		},
 		"soil_sensor_1": {
 			"type": "soil_sensor",
-			"i2c_address": ""
+			"i2c_address": "0x36"
 		},
 		"soil_sensor_2": {
 			"type": "soil_sensor",
-			"i2c_address": ""
+			"i2c_address": "0x36"
 		},
 		"water_pump": {
-			"type": "water",
-			"relay_id": 0
+			"type": "water"
 		},
 		"light_1": {
-			"type": "light",
-			"relay_id": 0
+			"type": "light"
 		},
 		"light_2": {
-			"type": "light",
-			"relay_id": 0
+			"type": "light"
 		},
 		"camera_1": {
 			"type": "camera",
-			"usb_id": 0
+			"usb_id": 0,
+			"record_interval": -1,
+			"save_path": "/camera_data/"
 		},
 		"camera_2": {
 			"type": "camera",
-			"usb_id": 1
-		},
-		"relay_module": {
-			"type": "relay",
-			"relay_module_length": 8,
-			"relay_devices": {
-				"water_pump": 1,
-				"light_1": 2,
-				"light_2": 3
-			}
+			"usb_id": 1,
+			"record_interval": -1,
+			"save_path": "/camera_data/"
 		}
+	},
+	"relay_module": {
+		"water_pump": 1,
+		"light_1": 2,
+		"light_2": 3
+
 	}
 }

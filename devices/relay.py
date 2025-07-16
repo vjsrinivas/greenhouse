@@ -12,33 +12,47 @@ class RelayModule:
         pin_mapping (Dict) -> "device_str": pin_int
         """
         self.__pin__ = pin_mapping
-        self.relays = []
+        self.relays = {}
         for dev, pin in self.__pin__.items():
-            self.relays.append( OutputDevice(pin, active_high=False, initial_value=False) )
+            self.relays[dev] = OutputDevice(pin, active_high=True, initial_value=False)
         
     def __device_chk__(self, device_name:str):
         assert device_name in self.__pin__, "{} is not a key in pin mapping!".format(device_name)
 
     def on(self, device_name:str):
-        self.__device_chk__()
+        self.__device_chk__(device_name)
         self.relays[device_name].on()
 
     def off(self, device_name:str):
-        self.__device_chk__()
+        self.__device_chk__(device_name)
         self.relays[device_name].off()
 
     def __repr__(self):
-        _str = ""
+        _str = "Relay Status:\n"
         for dev, pin in self.__pin__.items():
-            if pin.value == 1:
+            _relay = self.relays[dev]
+            if _relay.value == 1:
                 _value_str = "On"
                 _value = emoji.good
             else:
                 _value_str = "Off"
                 _value = emoji.bad
-            _str += "{} - {} ({})".format(dev, _value, _value_str)
+            #_str += "{} - {}\n".format(dev, _value_str)
+            _str += "{:^15} - {} ({})\n".format(dev, _value, _value_str)
         return _str
 
 if __name__ == "__main__":
+    import time
     # Test relaying:
-    pass
+    relay = OutputDevice(17, active_high=False, initial_value=True)
+    input()
+
+    while True:
+        relay.on()
+        print(relay.value)
+        time.sleep(1)
+        relay.off()
+        print(relay.value)
+        time.sleep(1)
+    #test_relay = RelayModule({"water_pump": 17})
+    #test_relay.on("water_pump")

@@ -22,7 +22,11 @@ class GC0307:
 
     def release(self):
         self.__cap__.release()
-    
+
+    @property
+    def readable(self):
+        return self.__cap__.isOpened()
+
     @property
     def description(self):
         return self.__desc__

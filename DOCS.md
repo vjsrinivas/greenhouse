@@ -6,8 +6,8 @@ This document serves as the master reference for all documentation related to th
 Please note that a basic level of prior knowledge is required, including fundamental crafting skills, beginner-level programming, intermediate computing concepts, and basic electrical skills (e.g., soldering and wiring).
 
 ## Table of Contents:
-- Objective
-- Materials
+- [Objective](docs/OBJECTIVE.md)
+- [Materials](docs/MATERIALS.md)
 - Structural Construction
 - Electrical Construction
 - System Wiring and Plumbing
@@ -18,3 +18,4 @@ Please note that a basic level of prior knowledge is required, including fundame
 
 ## Update Log:
 - (7/20/2025) - Establish basic DOCS.md
+* (7/20/2025) - Add OBJECTIVE.md and partial MATERIALS.md

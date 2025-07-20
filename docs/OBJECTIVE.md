@@ -1,0 +1,14 @@
+# Objective
+
+### What Exactly Are We Building in This Project?
+
+- A semi-automated greenhouse designed to fit in an average-sized classroom.
+- The greenhouse will be capable of performing the following tasks autonomously:
+	- Turn grow lamp(s) on or off based on total light exposure required for the selected crop type.
+	- Activate or deactivate the water pumping system for drip-based irrigation.
+	- Ventilate and heat the interior using fans and a small heating element.
+	- Collect environmental data from light, soil moisture, and temperature sensors.
+- These actions will be triggered based on:
+	- Predefined schedules programmed into a central computer.
+	- Real-time sensor readings.
+

@@ -9,6 +9,7 @@ Types of scheduling:
     - Sensor (reading and triggering from devices; global timings too)
 """
 
+
 # Base class:
 class Scheduler:
     def __init__(self, interval_sec):
@@ -17,6 +18,7 @@ class Scheduler:
 
     def __call__(self) -> bool:
         raise NotImplementedError()
+
 
 # Generic sensor scheduler:
 class SensorScheduler(Scheduler):
@@ -32,6 +34,7 @@ class SensorScheduler(Scheduler):
         else:
             return False
 
+
 # Generic device scheduler:
 class DeviceScheduler(Scheduler):
     def __init__(self, sensor_threshold=100, interval_sec=10, comparison="less"):
@@ -43,15 +46,21 @@ class DeviceScheduler(Scheduler):
             self.op = operator.lt
         elif self.comparison == "greater":
             self.op = operator.gt
+        elif self.comparison == "equal":
+            self.op = operator.eq
+        else:
+            raise ValueError(
+                "{} is not a recognized comparison state".format(self.comparison)
+            )
 
-    def __call__(self, sensor_input:float) -> bool:
+    def __call__(self, sensor_input: float) -> bool:
         current_time = time.time()
         delta = current_time - self.last_interval
         if delta >= self.interval_sec:
             self.last_interval = current_time
-            
+
             # sensor conditions:
-            if self.op(self.sensor, sensor_input):
+            if self.op(self.sensor_threshold, sensor_input):
                 return True
             else:
                 return False

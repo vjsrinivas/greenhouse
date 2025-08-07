@@ -3,7 +3,7 @@ import board
 from typing import *
 import busio
 from loguru import logger
-
+import adafruit_tca9548a
 
 class TemperatureSensor:
     def __init__(
@@ -12,6 +12,7 @@ class TemperatureSensor:
         description: str,
         temp_unit: Literal["celsius", "fahrenheit"] = "celsius",
         skip_on_fail=True,
+        use_multi_channel=False
     ):
         # Check if given temperature unit is valid
         self.__sunits__ = ["celsius", "fahrenheit"]
@@ -27,10 +28,12 @@ class TemperatureSensor:
         self.temp_unit = temp_unit
         self.skip_on_fail = skip_on_fail
         self._i2c_fail = False
+        self.use_multi = use_multi_channel
 
         # Connect to temp sensor:
         self.__connect__()
-
+        self.__init_probe__()
+    
         # Push off bad first data:
         if not self._i2c_fail:
             _first_temp = self.temperature
@@ -49,7 +52,13 @@ class TemperatureSensor:
                 )
             )
             self.i2c = busio.I2C(board.SCL, board.SDA)
-            self.sht31d = sht31d.SHT31D(self.i2c, address=self.addr)
+
+            if self.use_multi:
+                self.tca = adafruit_tca9548a.TCA9548A(self.i2c)
+                self.sht31d = sht31d.SHT31D(self.tca[self.addr])
+            else:
+                self.sht31d = sht31d.SHT31D(self.i2c, address=self.addr)
+        
         except Exception as e:
             self._i2c_fail = True
             logger.error(e)
@@ -75,11 +84,34 @@ class TemperatureSensor:
     def relative_humidity(self):
         return self.sht31d.relative_humidity
 
+    def __init_probe__(self, probe_attempts=5):
+        successes = 0
+        last_exception = None
+        for i in range(probe_attempts):
+            try:
+                _ = self.temperature
+                _ = self.relative_humidity
+                successes += 1
+                break
+            except Exception as e:
+                last_exception = e
+
+        if successes == 0:
+            raise last_exception
+        else:
+            return None
+
 
 if __name__ == "__main__":
     import time
+    """
     temp_sensor = TemperatureSensor(
         address=0x44, description="Temperature Sensor #1", temp_unit="fahrenheit"
+    )
+    """
+
+    temp_sensor = TemperatureSensor(
+        address=2, description="Temperature Sensor #1", temp_unit="fahrenheit", use_multi_channel=True
     )
     while True:
         logger.info(

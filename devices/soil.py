@@ -5,7 +5,7 @@ from loguru import logger
 from adafruit_seesaw.seesaw import (
     Seesaw,
 )  # Generic soil sensor that can be used for Adafruit STEMMA soil sensor
-
+import adafruit_tca9548a
 
 class SoilSensor:
     def __init__(
@@ -14,6 +14,7 @@ class SoilSensor:
         description: str,
         temp_unit: Literal["celsius", "fahrenheit"] = "celsius",
         skip_on_fail=True,
+        use_multi_channel=False
     ):
         # Check if given temperature unit is valid
         self.__sunits__ = ["celsius", "fahrenheit"]
@@ -29,11 +30,18 @@ class SoilSensor:
         self.__desc__ = description
         self.skip_on_fail = skip_on_fail
         self._i2c_fail = False
+        self.use_multi = use_multi_channel
 
         # Connect to soil sensor:
         self.__connect__()
 
     def __connect__(self):
+        
+        self.i2c = busio.I2C(board.SCL, board.SDA)
+        self.tca = adafruit_tca9548a.TCA9548A(self.i2c)
+        self.stemma_obj = Seesaw(self.tca[self.addr])
+        exit()
+
         try:
             logger.info(
                 "Connecting (SCL:{} | SDA:{} | Address: {})".format(
@@ -41,7 +49,14 @@ class SoilSensor:
                 )
             )
             self.i2c = busio.I2C(board.SCL, board.SDA)
-            self.stemma_obj = Seesaw(self.i2c, addr=self.addr)
+            
+            if self.use_multi:
+                self.tca = adafruit_tca9548a.TCA9548A(self.i2c)
+                self.stemma_obj = Seesaw(self.tca[self.addr])     
+                exit()
+            else:
+                self.stemma_obj = Seesaw(self.i2c, addr=self.addr)
+        
         except Exception as e:
             self._i2c_fail = True
             logger.error(e)
@@ -71,7 +86,8 @@ class SoilSensor:
 if __name__ == "__main__":
     import time
 
-    sensor = SoilSensor(0x36, "soil_sensor_1")
+    #sensor = SoilSensor(0x36, "soil_sensor_1")
+    sensor = SoilSensor(2, "soil_sensor_1", use_multi_channel=True)
 
     while True:
         print(sensor.moisture, sensor.temperature)

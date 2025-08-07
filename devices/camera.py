@@ -35,7 +35,7 @@ class GC0307:
 
 
 if __name__ == "__main__":
-    cam = GC0307(0, "main", GC0307_RESOLUTION.RES640P)
+    cam = GC0307(2, "main", GC0307_RESOLUTION.RES640P)
     ret, frame = cam.read()
     print(frame.shape)
     cv2.imwrite("test.png", frame)

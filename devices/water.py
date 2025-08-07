@@ -7,7 +7,9 @@ class WaterPump:
     def __init__(self, device_name: str, relay_module):
         self.__relay__ = relay_module
         self.__dev__ = device_name
-        self.__active__ = False
+        self.__state__ = False
+        self.period_spacing = 10
+        self.period = 5
 
     def start_pump(self):
         self.__relay__[self.__dev__].on()
@@ -16,29 +18,38 @@ class WaterPump:
         self.__relay__[self.__dev__].off()
 
     def pump(self, period_spacing_ms=10, period_sec=5):
-        _thread = Thread(target=self.__pump_thread__, args=(period_spacing_ms, period_sec))
-        _thread.start()
-        return _thread
+        t1 = time.time()
+        self.start_pump()
 
-    def __pump_thread__(self, period_spacing_ms, period_sec) -> int:
-        self.__active__ = True
-        try:
-            t1 = time.time()
-            while time.time() - t1 < period_sec:
-                self.start_pump()
-                time.sleep(period_spacing_ms/1000)
+        while True:
+            if period_spacing_ms != -1:
                 self.stop_pump()
-            self.stop_pump()
-            self.__active__ = False
-            return 0
-        except Exception as e:
-            logger.error(e)
-            self.__active__ = False
-            return -1    
+                time.sleep(period_spacing_ms/1000.0)
+                self.start_pump()
+            t2 = time.time()
+            if t2-t1 > period_sec:
+                break
 
-    def __call__(self, state):
-        if not self.__active__:
-            self.pump()
+        self.stop_pump()
+        stop_duration = time.time() - t1
+        return stop_duration
+
+    @property
+    def keys(self):
+        return ["pump_time", "duration"]
+
+    def __call__(self, state:bool=None):
+        if state is None:
+            state = not self.__state__
+
+        if state:
+            # Pump blocks main thread:
+            _duration = self.pump(self.period_spacing, self.period)
+        else:
+            _duration = 0.0
+
+        self.__state__ = state
+        return {"pump_time":time.time() , "duration": _duration}
 
     @property
     def readable(self):

@@ -97,10 +97,17 @@ class TemperatureSensor:
                 last_exception = e
 
         if successes == 0:
+            logger.error("Failed to probe SHT31D properly...")
             raise last_exception
         else:
-            return None
+            return None 
 
+    @property
+    def keys(self):
+        return ["temperature", "relative_humidity"]
+
+    def __call__(self):
+        return {"temperature": self.temperature, "relative_humidity": self.relative_humidity}
 
 if __name__ == "__main__":
     import time
@@ -114,9 +121,12 @@ if __name__ == "__main__":
         address=2, description="Temperature Sensor #1", temp_unit="fahrenheit", use_multi_channel=True
     )
     while True:
+        print(temp_sensor())
+        """
         logger.info(
             "Temperature: {} | {}".format(
                 temp_sensor.temperature, temp_sensor.relative_humidity
             )
         )
+        """
         time.sleep(1)

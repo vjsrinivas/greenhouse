@@ -16,6 +16,7 @@ class LightSensor:
 
         # Connect to temp sensor:
         self.__connect__()
+        self.__init_probe__()
 
     def __connect__(self):
         try:
@@ -71,7 +72,13 @@ class LightSensor:
             raise last_exception
         else:
             return None
+    
+    @property
+    def keys(self):
+        return ["lux", "infrared", "spectrum"]
 
+    def __call__(self):
+        return {"lux": self.lux, "infrared": self.infrared, "spectrum": self.spectrum}
 
 
 if __name__ == "__main__":
@@ -79,5 +86,6 @@ if __name__ == "__main__":
     sensor1 = LightSensor(address=0, description="Light Sensor #1", use_multi_channel=True)
     sensor2 = LightSensor(address=1, description="Light Sensor #2", use_multi_channel=True)
     while True:
-        logger.info("{} Lux: {}".format(sensor1.name, sensor1.lux))
-        logger.info("{} Lux: {}".format(sensor2.name, sensor2.lux))
+        print(sensor1(), sensor2())
+        #logger.info("{} Lux: {}".format(sensor1.name, sensor1.lux))
+        #logger.info("{} Lux: {}".format(sensor2.name, sensor2.lux))

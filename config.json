@@ -4,60 +4,65 @@
 		"main_temp_sensor_1": {
 			"type": "temperature_sensor",
 			"i2c_address": "0x44",
-			"connections": []
+			"multiplex_idx": 2,
+			"connections": ["fan_1", "fan_2"],
+			"interval": 10
 		},
 		"light_sensor_1": {
 			"type": "light_sensor",
 			"i2c_address": "0x29",
-			"connections": ["light_1", "light_2"]
+			"multiplex_idx": 0,
+			"connections": ["light_1"],
+			"interval": 10
 		},
 		"light_sensor_2": {
 			"type": "light_sensor",
 			"i2c_address": "0x29",
-			"connections": ["light_1", "light_2"]
-		},
-		"soil_sensor_1": {
-			"type": "soil_sensor",
-			"i2c_address": "0x36",
-			"connections": ["water_pump"]
-		},
-		"soil_sensor_2": {
-			"type": "soil_sensor",
-			"i2c_address": "0x36",
-			"connections": ["water_pump"]
+			"multiplex_idx": 1,
+			"connections": ["light_1"],
+			"interval": 10
 		},
 		"water_pump": {
 			"type": "water"
 		},
 		"light_1": {
-			"type": "light"
+			"type": "light",
+			"compare": "lt",
+			"max_duration_day": 1000,
+			"sensor_keys": {"lux": 30]
 		},
 		"fan_1": {
-			"type": "fan"
+			"type": "fan",
+			"duration": 60,
+			"compare": "lt",
+			"sensor_keys": {"temperature": 75, "relative_humidity": 60]
 		},
 		"fan_2": {
-			"type": "fan"
+			"type": "fan",
+			"duration": 60,
+			"compare": "lt",
+			"sensor_keys": {"temperature": 75, "relative_humidity": 60]
 		},
-		"camera_1": {
+		"corner_camera_1": {
 			"type": "camera",
 			"usb_id": 0,
-			"record_interval": -1,
-			"save_path": "/camera_data/",
+			"interval": 10,
+			"save_path": "./camera_data/",
 			"connections": []
 		},
-		"camera_2": {
+		"corner_camera_2": {
 			"type": "camera",
-			"usb_id": 1,
-			"record_interval": -1,
-			"save_path": "/camera_data/",
+			"usb_id": 2,
+			"interval": 10,
+			"save_path": "./camera_data/",
 			"connections": []
 		}
 	},
 	"relay_module": {
-		"water_pump": 1,
-		"light_1": 2,
-		"fan_1": 3,
-		"fan_2": 4
+		"water_pump": 17,
+		"light_1": 23,
+		"fan_1": 27,
+		"fan_2": 22
 
 	}
 }

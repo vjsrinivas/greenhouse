@@ -16,6 +16,7 @@ from devices.sht31d import *
 from devices.soil import *
 from devices.tsl2591 import *
 from devices.water import *
+from devices.fan import *
 
 # scheduling imports:
 from scheduler import *
@@ -39,21 +40,24 @@ def initialize_from_config(config_file: str):
         connections = config["devices"][dev].get("connections", None) 
 
         if dev_type == "light_sensor":
-            i2c_addr = int(device["i2c_address"], 16)
-            device_obj = LightSensor(i2c_addr, dev)
-            scheduler_obj = SensorScheduler()
+            i2c_addr = device["multiplex_idx"]
+            interval_sec = device["interval"]
+            device_obj = LightSensor(i2c_addr, dev, use_multi_channel=True)
+            scheduler_obj = SensorScheduler(interval_sec=interval_sec)
             scheduler_type = "sensor"
 
         elif dev_type == "temperature_sensor":
-            i2c_addr = int(device["i2c_address"], 16)
-            device_obj = TemperatureSensor(i2c_addr, dev)
-            scheduler_obj = SensorScheduler()
+            i2c_addr = device["multiplex_idx"]
+            interval_sec = device["interval"]
+            device_obj = TemperatureSensor(i2c_addr, dev, use_multi_channel=True)
+            scheduler_obj = SensorScheduler(interval_sec=interval_sec)
             scheduler_type = "sensor"
 
         elif dev_type == "soil_sensor":
-            i2c_addr = int(device["i2c_address"], 16)
-            device_obj = SoilSensor(i2c_addr, dev)
-            scheduler_obj = SensorScheduler()
+            i2c_addr = device["multiplex_idx"]
+            interval_sec = device["interval"]
+            device_obj = SoilSensor(i2c_addr, dev, use_multi_channel=True)
+            scheduler_obj = SensorScheduler(interval_sec=interval_sec)
             scheduler_type = "sensor"
 
         elif dev_type == "light":
@@ -68,10 +72,17 @@ def initialize_from_config(config_file: str):
 
         elif dev_type == "camera":
             camera_id = device["usb_id"]
-            device_obj = GC0307(camera_id, dev, GC0307_RESOLUTION.RES640P)
+            save_path = device["save_path"]
+            interval_sec = device["interval"]
+            device_obj = GC0307(camera_id, dev, GC0307_RESOLUTION.RES640P, save_path)
             scheduler_type = "sensor"
-            scheduler_obj = SensorScheduler()
+            scheduler_obj = SensorScheduler(interval_sec=interval_sec)
         
+        elif dev_type == "fan":
+            device_obj = Fan(dev, relay_modules)
+            scheduler_type = "device"
+            scheduler_obj = DeviceScheduler()
+
         else:
             raise ValueError("Type {} is not detected!".format(dev_type))
 
@@ -121,11 +132,23 @@ if __name__ == "__main__":
     datetime_format = "%Y-%m-%d_%H-%M-%S"
     start_timestamp = datetime.now()
     os.makedirs(log_path, exist_ok=True)
-    log_paths = { _dev:os.path.join(log_path, "{}_{}.txt".format(_dev, start_timestamp.strftime(datetime_format)) ) for _dev in devices.keys()}
-    log_objects = {_dev:None for _dev in devices.keys()}
-    for _path in log_paths.keys():
-        log_objects[_path] = open(log_paths[_path], "w")
-        log_objects[_path].write("timestamp, value\n")
+    
+    log_paths = {}
+    for _dev in devices.keys():
+        if devices[_dev].type != "camera":
+            log_paths[_dev] = os.path.join(log_path, "{}_{}.txt".format(_dev, start_timestamp.strftime(datetime_format))) 
+    log_objects = {_dev:None for _dev in log_paths.keys()}
+
+    for _dev in log_paths.keys():
+        _path = log_paths[_dev]
+        logger.info("Writing device object of {} to log path {}".format(_dev, _path))
+        _header_csv = "timestamp"
+        device_obj = devices[_dev].device
+        for _key in device_obj.keys:
+            _header_csv += ",{}".format(_key)
+        _header_csv += "\n"
+        log_objects[_dev] = open(_path, "w") 
+        log_objects[_dev].write(_header_csv) 
 
     # 2. Main loop:
     while True:
@@ -135,22 +158,28 @@ if __name__ == "__main__":
                 device_scheduler = device.scheduler
                 if device_scheduler():
                     sensor_timestamp = datetime.now()
-                    sensor_data = 100 # TODO: Replace with sensor reading
+                    sensor_dict = device_obj() # TODO: Replace with sensor reading
                     
                     # log sensor data:
-                    log_objects[device_name].write("{},{}\n".format(sensor_timestamp.strftime(datetime_format), sensor_data))
-                    log_objects[device_name].flush()
+                    if device.type != "camera":
+                        _header_csv = sensor_timestamp.strftime(datetime_format)
+                        for _key in sensor_dict.keys():
+                            _header_csv += ",{}".format(sensor_dict[_key])
+                        _header_csv += "\n"
+                        log_objects[device_name].flush()
 
                     logger.debug("Placing {} into queue".format(device_name))
-                    interaction_queue.put((device_name, device.connections, sensor_data))
+                    interaction_queue.put((device_name, device.connections, sensor_dict))
         
         while interaction_queue.qsize() > 0:
             dname, dconn, dsensor = interaction_queue.get()
             print(dname, dconn, dsensor)
-
+            
             if len(dconn) > 0:
                 for _conn in dconn:
                     _dev = devices[_conn]
+                    print(dsensor)
+                    exit()
                     if _dev.scheduler(dsensor):
                         # TODO: set device's primary property to active state
                         _dev.device(state=True)

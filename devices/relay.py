@@ -18,7 +18,7 @@ class RelayModule:
         self.__pin__ = pin_mapping
         self.relays = {}
         for dev, pin in self.__pin__.items():
-            self.relays[dev] = OutputDevice(pin, active_high=True, initial_value=False)
+            self.relays[dev] = OutputDevice(pin, active_high=False, initial_value=False)
 
     def __device_chk__(self, device_name: str):
         assert device_name in self.__pin__, "{} is not a key in pin mapping!".format(
@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
     # Test relaying:
     PIN = args.pin
-    relay = OutputDevice(PIN, active_high=False, initial_value=True)
+    relay = OutputDevice(PIN, active_high=False, initial_value=False)
     #relay2 = OutputDevice(27, active_high=False, initial_value=True)
     print(relay.value)
     input()

@@ -14,9 +14,10 @@ Please note that a basic level of prior knowledge is required, including fundame
 - [Programming](docs/PROGRAMMING.md)
 - [Execution](docs/EXECUTION.md)
 - [Notes](docs/NOTES.md)
-- Known Issues
+- [Known Issues](docs/ISSUES.md)
 
 ## Update Log:
 * (7/20/2025) - Establish basic DOCS.md
 * (7/20/2025) - Add OBJECTIVE.md and partial MATERIALS.md
 * (8/13/2025) - Add more starting documents
+* (8/18/2025) - Add ISSUES.md document

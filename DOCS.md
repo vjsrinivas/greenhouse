@@ -10,7 +10,7 @@ Please note that a basic level of prior knowledge is required, including fundame
 - [Materials](docs/MATERIALS.md)
 - [Structural Construction](docs/STRUCTURE.md)
 - [Electrical Construction](docs/ELECTRICAL.md)
-- [System Wiring and Plumbing]()
+- [System Wiring and Plumbing](docs/WIRING.md)
 - [Programming](docs/PROGRAMMING.md)
 - [Execution](docs/EXECUTION.md)
 - [Notes](docs/NOTES.md)

@@ -6,21 +6,21 @@
 			"i2c_address": "0x44",
 			"multiplex_idx": 2,
 			"connections": ["fan_1", "fan_2"],
-			"interval": 10
+			"interval_sec": 10
 		},
 		"light_sensor_1": {
 			"type": "light_sensor",
 			"i2c_address": "0x29",
 			"multiplex_idx": 0,
 			"connections": ["light_1"],
-			"interval": 10
+			"interval_sec": 10
 		},
 		"light_sensor_2": {
 			"type": "light_sensor",
 			"i2c_address": "0x29",
 			"multiplex_idx": 1,
 			"connections": ["light_1"],
-			"interval": 10
+			"interval_sec": 10
 		},
 		"water_pump": {
 			"type": "water"
@@ -28,32 +28,32 @@
 		"light_1": {
 			"type": "light",
 			"compare": "lt",
-			"max_duration_day": 1000,
-			"sensor_keys": {"lux": 30]
+			"sensor_keys": {"lux": 30},
+			"interval_sec": 10
 		},
 		"fan_1": {
 			"type": "fan",
 			"duration": 60,
 			"compare": "lt",
-			"sensor_keys": {"temperature": 75, "relative_humidity": 60]
+			"sensor_keys": {"temperature": 75, "relative_humidity": 60}
 		},
 		"fan_2": {
 			"type": "fan",
 			"duration": 60,
 			"compare": "lt",
-			"sensor_keys": {"temperature": 75, "relative_humidity": 60]
+			"sensor_keys": {"temperature": 75, "relative_humidity": 60}
 		},
 		"corner_camera_1": {
 			"type": "camera",
 			"usb_id": 0,
-			"interval": 10,
+			"interval_sec": 10,
 			"save_path": "./camera_data/",
 			"connections": []
 		},
 		"corner_camera_2": {
 			"type": "camera",
 			"usb_id": 2,
-			"interval": 10,
+			"interval_sec": 10,
 			"save_path": "./camera_data/",
 			"connections": []
 		}
@@ -63,6 +63,8 @@
 		"light_1": 23,
 		"fan_1": 27,
 		"fan_2": 22
-
+	},
+	"thresholds": {
+		"total_sunlight_min": 863
 	}
 }

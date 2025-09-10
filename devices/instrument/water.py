@@ -52,5 +52,9 @@ class WaterPump:
         return {"pump_time":time.time() , "duration": _duration}
 
     @property
+    def state(self):
+        return self.__state__
+
+    @property
     def readable(self):
         return True

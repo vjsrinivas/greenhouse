@@ -18,13 +18,6 @@ class Fan:
     def keys(self):
         return ["state"]
 
-    def __thread__(self):
-        t1 = time.time()
-        while True:
-            t2 = time.time()
-            if t2-t1 > self.duration:
-                break
-
     def __call__(self, state:bool=None):
         # Toggle states:
         if state is None:
@@ -36,6 +29,10 @@ class Fan:
             self.stop_fan()
         self.__state__ = state
         return {"state": state}
+
+    @property
+    def state(self):
+        return self.__state__
 
     @property
     def readable(self):

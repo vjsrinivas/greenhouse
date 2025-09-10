@@ -16,8 +16,8 @@ class LightBulb:
     def keys(self):
         return ["state"]
 
-    def __call__(self, state:bool=None):
-        # Toggle states:
+    def trigger(self, state:bool=None):
+        # Toggle states if state is not defined!
         if state is None:
             state = not self.__state__
 
@@ -27,6 +27,10 @@ class LightBulb:
             self.stop_light()
         self.__state__ = state
         return {"state": state}
+
+    @property
+    def state(self):
+        return self.__state__
 
     @property
     def readable(self):

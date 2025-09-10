@@ -5,6 +5,7 @@ from queue import Queue
 from types import SimpleNamespace
 from typing import *
 from datetime import datetime
+from argparse import ArgumentParser
 
 from loguru import logger
 
@@ -28,6 +29,7 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
     sensor_tree = {}
     instrument_tree = {}
     log_path = config["log_path"]
+    budgets = config["budgets"]
 
     # Create relay module list:
     relay_info = config["relay_module"]
@@ -39,6 +41,7 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
         dev_type = device["type"]
         scheduler_obj = None
         device_type = None
+        limiter_key = None
         connections = config["devices"][dev].get("connections", None) 
 
         if dev_type == "light_sensor":
@@ -55,6 +58,7 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
             scheduler_obj = SensorScheduler(interval_sec=interval_sec)
             device_type = "sensor"
 
+        # TODO: Isn't implemented; would affect water pump
         elif dev_type == "soil_sensor":
             i2c_addr = device["multiplex_idx"]
             interval_sec = device["interval_sec"]
@@ -64,13 +68,15 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
 
         elif dev_type == "light":
             device_obj = LightBulb(dev, relay_modules)
-            device_type = "device"
-            scheduler_obj = DeviceScheduler()
+            device_type = "device" 
+            limiters = device["sensor_keys"]
+            limiter_key = "lux" # TODO: make this multiple limits; have to make DeviceScheduler accept multiple thresholds
+            scheduler_obj = DeviceScheduler(sensor_threshold=limiters[limiter_key], interval_sec=10, comparison="less", budget_sec=budgets["total_sunlight_minutes"]*60, accumulation_state=True)
 
         elif dev_type == "water":
             device_obj = WaterPump(dev, relay_modules)
             device_type = "device"
-            scheduler_obj = DeviceScheduler()
+            scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=10, comparison="equal", budget_sec=1e100, accumulation_state=True)
 
         elif dev_type == "camera":
             camera_id = device["usb_id"]
@@ -83,18 +89,37 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
         elif dev_type == "fan":
             device_obj = Fan(dev, relay_modules)
             device_type = "device"
-            scheduler_obj = DeviceScheduler()
-
+            limiters = device["sensor_keys"]
+            limiter_key = "temperature" # TODO: make this multiple limits; have to make DeviceScheduler accept multiple thresholds
+            
+            # Two schedules - one for an interval and one when the temperature gets too hot
+            iterative_scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=10, comparison="equal", budget_sec=1e100, accumulation_state=True)
+            scheduler_obj = DeviceScheduler(sensor_threshold=limiters[limiter_key], interval_sec=10, comparison="equal", budget_sec=86400, accumulation_state=True)
         else:
             raise ValueError("Type {} is not detected!".format(dev_type))
 
-        
-        device_tree_obj = SimpleNamespace(
-            device=device_obj,
-            type=dev_type,
-            connections=connections,
-            scheduler=scheduler_obj,
-        )
+        if dev_type == "fan":
+            device_tree_obj = SimpleNamespace(
+                device=device_obj,
+                type=dev_type,
+                connections=connections,
+                scheduler=[scheduler_obj, iterative_scheduler_obj],
+                run_alone=False,
+                limiter_key=limiter_key
+            )
+        else:
+            device_tree_obj = SimpleNamespace(
+                device=device_obj,
+                type=dev_type,
+                connections=connections,
+                scheduler=[scheduler_obj],
+                run_alone=False,
+                limiter_key=limiter_key
+            )
+
+        # Some exceptions to consider:
+        if dev_type == "water":
+            device_tree_obj.run_alone = True
 
         if device_type == "sensor":
             sensor_tree[dev] = device_tree_obj
@@ -138,7 +163,6 @@ def parse_arg():
 if __name__ == "__main__":
     args = parse_arg()
     CONFIG_FILE = args.config
-    LOG_PATH = CONFIG_FILE["log_path"]
     sensor_tree, instrument_tree, log_path = initialize_from_config(CONFIG_FILE)
     interaction_queue = Queue()
 
@@ -175,7 +199,7 @@ if __name__ == "__main__":
         log_objects[_dev].write(_header_csv) 
 
     # 1b. Setup instrument (single-run) logging:
-    run_path = os.path.join(LOG_PATH, "run_{}.txt".format(start_timestamp.strftime(datetime_format)))
+    run_path = os.path.join(log_path, "run_{}.txt".format(start_timestamp.strftime(datetime_format)))
     logger.info("Writing run file to {}".format(run_path))
     run_log = open(run_path, "w")
     run_log.write("type, state\n")
@@ -187,24 +211,26 @@ if __name__ == "__main__":
         # Loop through each sensor and take a measurement of the greenhouse environment:
         for device_name, device in sensor_tree.items(): 
             device_obj = device.device
-            scheduler = device.scheduler
+            scheduler_list = device.scheduler
 
-            if scheduler.can_schedule():
-                sensor_timestamp = datetime.now()
+            for scheduler in scheduler_list:
+                if scheduler.can_schedule():
+                    sensor_timestamp = datetime.now()
 
-                # Read sensor data
-                sensor_dict = device_obj()
-                
-                # log sensor data:
-                if device.type != "camera":
-                    _header_csv = sensor_timestamp.strftime(datetime_format)
-                    for _key in sensor_dict.keys():
-                        _header_csv += ",{}".format(sensor_dict[_key])
-                    _header_csv += "\n"
-                    log_objects[device_name].flush()
+                    # Read sensor data
+                    sensor_dict = device_obj()
+                    
+                    # log sensor data:
+                    if device.type != "camera":
+                        _header_csv = sensor_timestamp.strftime(datetime_format)
+                        for _key in sensor_dict.keys():
+                            _header_csv += ",{}".format(sensor_dict[_key])
+                        _header_csv += "\n"
+                        log_objects[device_name].flush()
 
-                logger.debug("Placing {} into queue".format(device_name))
-                interaction_queue.put((device_name, device.connections, sensor_dict, sensor_timestamp))
+                        logger.debug("Placing {} into queue".format(device_name))
+                        interaction_queue.put((device_name, device.connections, sensor_dict, sensor_timestamp))
+
 
         """
         Once we've cycled through each applicable sensor reading,
@@ -213,20 +239,33 @@ if __name__ == "__main__":
         while interaction_queue.qsize() > 0:
             # Unload and unpack data object from queue:
             dname, dconn, dsensor, dtimestamp = interaction_queue.get()
-            print(dname, dconn, dsensor)
             
             if len(dconn) > 0:
                 for _conn in dconn:
                     _dev = instrument_tree[_conn]
-                    scheduler:DeviceScheduler = _dev.scheduler
+                    scheduler_list: List[DeviceScheduler] = _dev.scheduler
+                    
+                    for scheduler in scheduler_list:
+                        # Can the instrument be changed?
+                        if scheduler.can_schedule():
+                            # What is the new state that the instrument should be in? 
+                            new_state = scheduler.change(dsensor)
+                            scheduler.update_budget(new_state, dtimestamp) # Update the internal scheduling budget (ex: light budget)
+                            _dev.device(state=new_state)
+                        else:
+                            logger.warning("{} scheduler is not ready to be polled!".format(_conn))
+        
+        for instrument_name, instrument in instrument_tree.items():
+            if instrument.run_alone:
+                scheduler_list = instrument.scheduler
 
-                    # Can the instrument be changed?
-                    if scheduler.can_schedule(dsensor):
+                for scheduler in scheduler_list:
+                    if scheduler.can_schedule():
                         # What is the new state that the instrument should be in? 
                         new_state = scheduler.change(dsensor)
                         scheduler.update_budget(new_state, dtimestamp) # Update the internal scheduling budget (ex: light budget)
                         _dev.device(state=new_state)
                     else:
-                        logger.warning("{} scheduler is not ready to be polled!")
+                        logger.warning("{} scheduler is not ready to be polled!".format(instrument_name))
 
         time.sleep(1) # tick every 1 second

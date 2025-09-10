@@ -4,31 +4,32 @@
 		"main_temp_sensor_1": {
 			"type": "temperature_sensor",
 			"i2c_address": "0x44",
-			"multiplex_idx": 2,
+			"multiplex_idx": 6,
 			"connections": ["fan_1", "fan_2"],
 			"interval_sec": 10
 		},
 		"light_sensor_1": {
 			"type": "light_sensor",
 			"i2c_address": "0x29",
-			"multiplex_idx": 0,
+			"multiplex_idx": 1,
 			"connections": ["light_1"],
 			"interval_sec": 10
 		},
 		"light_sensor_2": {
 			"type": "light_sensor",
 			"i2c_address": "0x29",
-			"multiplex_idx": 1,
+			"multiplex_idx": 2,
 			"connections": ["light_1"],
 			"interval_sec": 10
 		},
 		"water_pump": {
-			"type": "water"
+			"type": "water",
+			"duration": 10
 		},
 		"light_1": {
 			"type": "light",
 			"compare": "lt",
-			"sensor_keys": {"lux": 30},
+			"sensor_keys": {"lux": 35},
 			"interval_sec": 10
 		},
 		"fan_1": {
@@ -64,7 +65,7 @@
 		"fan_1": 27,
 		"fan_2": 22
 	},
-	"thresholds": {
-		"total_sunlight_min": 863
+	"budgets": {
+		"total_sunlight_minutes": 863
 	}
 }

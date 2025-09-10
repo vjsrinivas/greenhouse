@@ -83,8 +83,8 @@ class LightSensor:
 
 if __name__ == "__main__":
     #sensor = LightSensor(address=0x29, description="Light Sensor #1")
-    sensor1 = LightSensor(address=0, description="Light Sensor #1", use_multi_channel=True)
-    sensor2 = LightSensor(address=1, description="Light Sensor #2", use_multi_channel=True)
+    sensor1 = LightSensor(address=1, description="Light Sensor #1", use_multi_channel=True)
+    sensor2 = LightSensor(address=2, description="Light Sensor #2", use_multi_channel=True)
     while True:
         print(sensor1(), sensor2())
         #logger.info("{} Lux: {}".format(sensor1.name, sensor1.lux))

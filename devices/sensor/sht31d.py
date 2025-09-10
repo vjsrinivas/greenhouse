@@ -118,7 +118,7 @@ if __name__ == "__main__":
     """
 
     temp_sensor = TemperatureSensor(
-        address=2, description="Temperature Sensor #1", temp_unit="fahrenheit", use_multi_channel=True
+        address=6, description="Temperature Sensor #1", temp_unit="fahrenheit", use_multi_channel=True
     )
     while True:
         print(temp_sensor())

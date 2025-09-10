@@ -56,6 +56,7 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument("--pin", required=False, default=17)
+    parser.add_argument("--on", required=False, action="store_true", default=False)
     args = parser.parse_args()
 
     # Test relaying:
@@ -63,6 +64,10 @@ if __name__ == "__main__":
     relay = OutputDevice(PIN, active_high=False, initial_value=False)
     #relay2 = OutputDevice(27, active_high=False, initial_value=True)
     print(relay.value)
+    if args.on:
+        relay.on()
+        input()
+
     input()
 
     while True:

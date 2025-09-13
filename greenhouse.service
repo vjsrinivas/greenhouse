@@ -1,0 +1,21 @@
+[Unit]
+Description=Greenhouse auto-startup service
+After=network.target
+
+[Service]
+# Run as active user
+User=vijay
+Group=pi
+
+# Set working directory
+WorkingDirectory=/home/vijay/Documents/greenhouse
+
+# Activate virtual environment and run script
+ExecStart=/bin/bash -c 'source /home/vijay/Documents/greenhouse_env/bin/activate && python main.py'
+
+# Restart if it crashes
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

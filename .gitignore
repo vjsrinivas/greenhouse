@@ -1,3 +1,5 @@
 *.pyc
 __pycache__
 *.obsidian
+logs
+camera_data

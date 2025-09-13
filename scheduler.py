@@ -77,9 +77,15 @@ class DeviceScheduler(Scheduler):
         else:
             return False
 
-    def update_budget(self, state, sensor_timestamp:datetime):
+    def update_budget(self, state, sensor_timestamp:datetime) -> None:
+        current_timestamp = datetime.now()
+        if current_timestamp.day != sensor_timestamp.day:
+            logger.info("New day detected; reset budget and skip this iteration")
+            self.current_budget = 0
+            return None
+
         if self.accumulation_state == state:
-            current_timestamp = datetime.now()
             minute_duration = sensor_timestamp-current_timestamp
-            self.current_budget += (minute_duration.seconds/60)
+            self.current_budget += minute_duration.seconds
             logger.info("Current budget: {} | Budget: {}".format(self.current_budget, self.budget))
+            return None

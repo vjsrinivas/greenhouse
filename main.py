@@ -255,6 +255,7 @@ if __name__ == "__main__":
                         else:
                             logger.warning("{} scheduler is not ready to be polled!".format(_conn))
         
+        # Run through any instrument scheduler that is on an iterative timer (no sensor attached)
         for instrument_name, instrument in instrument_tree.items():
             if instrument.run_alone:
                 scheduler_list = instrument.scheduler
@@ -262,9 +263,10 @@ if __name__ == "__main__":
                 for scheduler in scheduler_list:
                     if scheduler.can_schedule():
                         # What is the new state that the instrument should be in? 
+                        dsensor = -1 # something that isn't equal to threshold value of scheduler to avoid adding to budget
                         new_state = scheduler.change(dsensor)
                         scheduler.update_budget(new_state, dtimestamp) # Update the internal scheduling budget (ex: light budget)
-                        _dev.device(state=new_state)
+                        instrument.device(state=new_state)
                     else:
                         logger.warning("{} scheduler is not ready to be polled!".format(instrument_name))
 

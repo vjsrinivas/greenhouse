@@ -5,6 +5,39 @@ import board
 from adafruit_tsl2591 import TSL2591
 from loguru import logger
 import adafruit_tca9548a
+from typing import *
+import numpy as np
+import time
+
+class FusedLightSensor:
+    def __init__(self, addresses:List[int], descriptions:List[str], skip_on_fail=True, use_multi_channel=False):
+        self.addresses = addresses # direct i2c connection
+        self.descriptions = descriptions
+        self.sensors = [LightSensor(addresses[i], descriptions[i], skip_on_fail, use_multi_channel) for i in range(len(addresses))]
+
+    @property
+    def readable(self):
+        return any([sensor.readable for sensor in self.sensors])
+
+    @property
+    def lux(self):
+        return float(np.mean( [sensor.lux for sensor in self.sensors] ))
+
+    @property
+    def infrared(self):
+        return float(np.mean( [sensor.infrared for sensor in self.sensors] ))
+
+    @property
+    def spectrum(self):
+        return float(np.mean( [sensor.spectrum for sensor in self.sensors] ))
+
+    @property
+    def keys(self):
+        return ["lux", "infrared", "spectrum"]
+
+    def __call__(self):
+        return {"lux": self.lux, "infrared": self.infrared, "spectrum": self.spectrum}
+
 
 class LightSensor:
     def __init__(self, address: int, description: str, skip_on_fail=True, use_multi_channel=False):
@@ -82,10 +115,14 @@ class LightSensor:
 
 
 if __name__ == "__main__":
+    fused_sensor = FusedLightSensor(addresses=[1,2], descriptions=["Light #1", "Light #2"], use_multi_channel=True)
     #sensor = LightSensor(address=0x29, description="Light Sensor #1")
     sensor1 = LightSensor(address=1, description="Light Sensor #1", use_multi_channel=True)
     sensor2 = LightSensor(address=2, description="Light Sensor #2", use_multi_channel=True)
     while True:
+        print(fused_sensor())
         print(sensor1(), sensor2())
         #logger.info("{} Lux: {}".format(sensor1.name, sensor1.lux))
         #logger.info("{} Lux: {}".format(sensor2.name, sensor2.lux))
+        time.sleep(2)
+

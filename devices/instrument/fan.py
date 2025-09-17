@@ -18,7 +18,7 @@ class Fan:
     def keys(self):
         return ["state"]
 
-    def __call__(self, state:bool=None):
+    def trigger(self, state:bool=None):
         # Toggle states:
         if state is None:
             state = not self.__state__

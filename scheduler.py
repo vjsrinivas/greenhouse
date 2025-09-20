@@ -103,10 +103,6 @@ class DeviceScheduler(Scheduler):
     def in_timerange(self, start: datetime, end: datetime, check: datetime) -> bool:
         """Return True if check's time is within [start, end], ignoring date."""
         s, e, c = start.time(), end.time(), check.time()
-        
-        print(s,e,c)
-        print(s<=e, s <= c <= e)
-        print("====================")
         if s <= e:  # Normal case (same day)
             return s <= c <= e
         else:       # Range crosses midnight
@@ -136,9 +132,9 @@ class DeviceScheduler(Scheduler):
 
     @property
     def next_poll_time(self):
-        current_time = time.time()
+        current_time = datetime.now()
         next_poll = self.last_interval + self.interval_sec
         dt = datetime.fromtimestamp(next_poll)
         next_date_poll = dt.strftime("%-I:%M:%S %p %-m/%-d/%Y")
-        print(next_date_poll)
-        return next_date_poll
+        delta = (current_time-next_date_poll)
+        return delta.seconds

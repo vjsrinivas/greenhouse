@@ -73,9 +73,11 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
             scheduler_obj = DeviceScheduler(sensor_threshold=limiters[limiter_key], interval_sec=10, comparison="greater", budget_struct=budgets[dev], accumulation_state=True)
 
         elif dev_type == "water":
-            device_obj = WaterPump(dev, relay_modules)
             device_type = "device"
-            scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=10, comparison="equal", budget_struct={"seconds":1e100}, accumulation_state=True)
+            duration_sec = device["duration"]
+            interval_sec = device["interval_sec"]
+            device_obj = WaterPump(dev, relay_modules, period=duration_sec)
+            scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=interval_sec, comparison="equal", budget_struct={"seconds":1e100}, accumulation_state=True)
 
         elif dev_type == "camera":
             camera_id = device["usb_id"]
@@ -90,10 +92,12 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
             device_type = "device"
             limiters = device["sensor_keys"]
             limiter_key = "temperature" # TODO: make this multiple limits; have to make DeviceScheduler accept multiple thresholds
-            
+            duration_sec = device["duration"]
+            interval_sec = device["interval_sec"]
+
             # Two schedules - one for an interval and one when the temperature gets too hot
-            iterative_scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=10, comparison="not_equal", budget_struct={"seconds": 1e100}, accumulation_state=True)
-            scheduler_obj = DeviceScheduler(sensor_threshold=limiters[limiter_key], interval_sec=10, comparison="less", budget_struct={"seconds": 86400}, accumulation_state=True)
+            iterative_scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=interval_sec, comparison="not_equal", budget_struct={"seconds": 1e100}, accumulation_state=True)
+            scheduler_obj = DeviceScheduler(sensor_threshold=limiters[limiter_key], interval_sec=interval_sec, comparison="less", budget_struct={"seconds": 86400}, accumulation_state=True)
         else:
             raise ValueError("Type {} is not detected!".format(dev_type))
 
@@ -103,7 +107,7 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
                     device=device_obj,
                     type=dev_type,
                     connections=connections,
-                    scheduler=[scheduler_obj, iterative_scheduler_obj],
+                    scheduler=[scheduler_obj, iterative_scheduler_obj], # TODO: break into its own class
                     run_alone=False,
                     limiter_key=limiter_key
                 )
@@ -266,11 +270,14 @@ if __name__ == "__main__":
                     _dev = instrument_tree[_conn]
                     scheduler_list: List[DeviceScheduler] = _dev.scheduler
                     
+                    # TODO: This is a workaround; break scheduler list into Namespace objects
+                    if len(scheduler) > 1:
+                        scheduler_list = [scheduler[0]] # Get just the sensor-based scheduler
+
                     for scheduler in scheduler_list:
                         # Can the instrument be changed?
                         if scheduler.can_schedule():
                             # What is the new state that the instrument should be in? 
-                            print(dname)
                             new_state = scheduler.change(dsensor[_dev.limiter_key])
                             scheduler.update_budget(new_state, dtimestamp) # Update the internal scheduling budget (ex: light budget)
                             _dev.device.trigger(state=new_state)
@@ -282,6 +289,9 @@ if __name__ == "__main__":
         for instrument_name, instrument in instrument_tree.items():
             if instrument.run_alone:
                 scheduler_list = instrument.scheduler
+                # TODO: This is a workaround; break scheduler list into Namespace objects
+                if len(scheduler) > 1:
+                    scheduler_list = [scheduler[1]] # Get just the iterative-based scheduler
 
                 for scheduler in scheduler_list:
                     if scheduler.can_schedule():

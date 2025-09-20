@@ -24,7 +24,8 @@
 		},
 		"water_pump": {
 			"type": "water",
-			"duration": 10
+			"duration": 20,
+			"interval_sec": 60
 		},
 		"light_1": {
 			"type": "light",
@@ -35,14 +36,16 @@
 		"fan_1": {
 			"type": "fan",
 			"duration": 60,
-			"compare": "lt",
-			"sensor_keys": {"temperature": 75, "relative_humidity": 60}
+			"interval_sec": 120,
+			"compare": "gt",
+			"sensor_keys": {"temperature": 85, "relative_humidity": 60}
 		},
 		"fan_2": {
 			"type": "fan",
 			"duration": 60,
-			"compare": "lt",
-			"sensor_keys": {"temperature": 75, "relative_humidity": 60}
+			"interval_sec": 120,
+			"compare": "gt",
+			"sensor_keys": {"temperature": 85, "relative_humidity": 60}
 		},
 		"corner_camera_1": {
 			"type": "camera",

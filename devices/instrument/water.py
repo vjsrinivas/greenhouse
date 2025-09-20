@@ -4,12 +4,20 @@ import time
 from loguru import logger
 
 class WaterPump:
-    def __init__(self, device_name: str, relay_module):
+    """
+    NOTE: This class is timer-based only. Future addition
+    might utilized a soil sensor to report back moisture content.
+    Moisture content can be used to trigger "smarter" watering
+    behavior
+    """
+
+
+    def __init__(self, device_name: str, relay_module, period_spacing_sec=10, period=5):
         self.__relay__ = relay_module
         self.__dev__ = device_name
         self.__state__ = False
-        self.period_spacing = 10 # ms
-        self.period = 5 # seconds
+        self.period_spacing_sec = period_spacing_sec # seconds
+        self.period = period # seconds
         
         self.thread_duration = 0.0
         self.thread_start = False
@@ -21,18 +29,18 @@ class WaterPump:
     def stop_pump(self):
         self.__relay__[self.__dev__].off()
 
-    def __thread_function__(self, period_spacing_ms=10, period_sec=5):
+    def __thread_function__(self, period_spacing_sec=10, period_sec=5):
         t1 = time.time()
         
         # NOTE: Enable once water bucket is filled with water
         # self.start_pump()
 
         while True:
-            if period_spacing_ms != -1:
+            if period_spacing_sec != -1:
                 # NOTE: Enable once water bucket is filled with water
                 # self.stop_pump()
 
-                time.sleep(period_spacing_ms/1000.0)
+                time.sleep(period_spacing_sec)
                 
                 # NOTE: Enable once water bucket is filled with water
                 # self.start_pump()
@@ -48,6 +56,8 @@ class WaterPump:
         logger.info("Water pump thread exiting after {} seconds".format(self.thread_duration))
 
     def trigger(self, state):
+        self.__state__ = state # NOTE: Pointless
+        
         if not self.thread_start:
             # start pump thread; otherwise, skip with warning
             self.active_thread = Thread(target=self.__thread_function__, args=(self.period_spacing, self.period))
@@ -59,19 +69,6 @@ class WaterPump:
     @property
     def keys(self):
         return ["pump_time", "duration"]
-
-    def __call__(self, state:bool=None):
-        if state is None:
-            state = not self.__state__
-
-        if state:
-            # Pump blocks main thread:
-            _duration = self.pump(self.period_spacing, self.period)
-        else:
-            _duration = 0.0
-
-        self.__state__ = state
-        return {"pump_time":time.time() , "duration": _duration}
 
     @property
     def state(self):

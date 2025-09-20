@@ -227,11 +227,11 @@ if __name__ == "__main__":
     run_path = os.path.join(log_path, "run_{}.txt".format(start_timestamp.strftime(datetime_format)))
     logger.info("Writing run file to {}".format(run_path))
     run_log = open(run_path, "w")
-    run_log.write("type, state\n")
+    run_log.write("type, state, timestamp\n")
 
     # 2. Main loop:
     while True:
-        run_log.write("heartbeat, off\n")
+        run_log.write(f"heartbeat, off, {time.time()}\n")
 
         # Loop through each sensor and take a measurement of the greenhouse environment:
         for device_name, device in sensor_tree.items(): 
@@ -281,6 +281,7 @@ if __name__ == "__main__":
                             new_state = scheduler.change(dsensor[_dev.limiter_key])
                             scheduler.update_budget(new_state, dtimestamp) # Update the internal scheduling budget (ex: light budget)
                             _dev.device.trigger(state=new_state)
+                            run_log.write(f"{_conn}, {new_state}, {time.time()}\n")
                         else:
                             #if loop_iteration % logging_iteration == 0 or _dev.run_alone:
                             logger.warning("{} scheduler is not ready to be polled!".format(_conn))
@@ -299,6 +300,7 @@ if __name__ == "__main__":
                         new_state = scheduler.change(0)
                         scheduler.update_budget(new_state, datetime.now()) # Update the internal scheduling budget (ex: light budget)
                         instrument.device.trigger(state=new_state)
+                        run_log.write(f"{_conn}, {new_state}, {time.time()}\n")
                     else:
                         if loop_iteration % logging_iteration == 0:
                             logger.warning("(Iterative) {} scheduler is not ready to be polled!".format(instrument_name))
@@ -308,3 +310,4 @@ if __name__ == "__main__":
         loop_iteration += 1
         if loop_iteration >= 1e10:
             loop_iteration = 0 # prevent any possible overflow
+        run_log.flush()

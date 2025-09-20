@@ -31,3 +31,18 @@
     * TODO...
 7. Pretty simple - reuse the 4-way T split connector and remake it into a 3-way T split connector.
     * Potentially use PVC glue in this case or some kind of glue that can bind PVC and PLA/PETG
+
+# Random Notes to Future Self:
+* Moving away from the random Amazon electronic enclosure with a 3D printed alternative
+* Parametric enclosure structure that can fit different sizes:
+    Parameters:
+        * Width, height of the enclosure
+        * Trough seal width
+        * Trough seal depth
+* Sliced version to print on typical FDM printer
+    * combine parts with set screws and click into place
+* Hinge idea: https://www.printables.com/model/649354-print-in-place-draw-latch-item-profil-3030
+* Loop latch: https://us.tchweb.com/collections/loop-latches/products/501-9202805
+     * Print the lip part
+* Gasket: https://www.digikey.com/en/products/detail/fix-supply/ZUSA-RC-926/17749535
+* Maybe a curtain above the mount take protects the enclosure

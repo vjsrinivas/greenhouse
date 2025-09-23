@@ -52,6 +52,7 @@ class WaterPump:
         # self.stop_pump()
         stop_duration = time.time() - t1
         self.thread_active = False
+        self.iteration_on = False
         self.thread_duration = stop_duration
         logger.info("Water pump thread exiting after {} seconds".format(self.thread_duration))
 
@@ -60,7 +61,7 @@ class WaterPump:
         
         if not self.thread_start:
             # start pump thread; otherwise, skip with warning
-            self.active_thread = Thread(target=self.__thread_function__, args=(self.period_spacing, self.period))
+            self.active_thread = Thread(target=self.__thread_function__, args=(self.period_spacing_sec, self.period))
             self.active_thread.start()
             self.thread_active = True
         else:

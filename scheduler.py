@@ -95,6 +95,7 @@ class DeviceScheduler(Scheduler):
             if not self.in_timerange(self.budget_start, self.budget_end, current_timestamp):
                 can_run = False
                 logger.warning("Scheduler's change function is not in time range: {}".format(self.budget_start.time(), self.budget_end.time()))
+                
         if self.op(self.sensor_threshold, sensor_input) and self.budget_sec >= self.current_budget and can_run:
             return True
         else:

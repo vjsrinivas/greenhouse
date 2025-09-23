@@ -88,15 +88,16 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
             scheduler_obj = SensorScheduler(interval_sec=interval_sec)
         
         elif dev_type == "fan":
-            device_obj = Fan(dev, relay_modules)
             device_type = "device"
             limiters = device["sensor_keys"]
             limiter_key = "temperature" # TODO: make this multiple limits; have to make DeviceScheduler accept multiple thresholds
             duration_sec = device["duration"]
             interval_sec = device["interval_sec"]
 
+            device_obj = Fan(dev, relay_modules, duration=duration_sec)
+            
             # Two schedules - one for an interval and one when the temperature gets too hot
-            iterative_scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=interval_sec, comparison="not_equal", budget_struct={"seconds": 1e100}, accumulation_state=True)
+            iterative_scheduler_obj = DeviceScheduler(sensor_threshold=0, interval_sec=interval_sec, comparison="equal", budget_struct={"seconds": 1e100}, accumulation_state=True)
             scheduler_obj = DeviceScheduler(sensor_threshold=limiters[limiter_key], interval_sec=interval_sec, comparison="less", budget_struct={"seconds": 86400}, accumulation_state=True)
         else:
             raise ValueError("Type {} is not detected!".format(dev_type))
@@ -108,7 +109,7 @@ def initialize_from_config(config_file: str, return_relay_module:bool=False):
                     type=dev_type,
                     connections=connections,
                     scheduler=[scheduler_obj, iterative_scheduler_obj], # TODO: break into its own class
-                    run_alone=False,
+                    run_alone=True,
                     limiter_key=limiter_key
                 )
             else:
@@ -271,8 +272,8 @@ if __name__ == "__main__":
                     scheduler_list: List[DeviceScheduler] = _dev.scheduler
                     
                     # TODO: This is a workaround; break scheduler list into Namespace objects
-                    if len(scheduler) > 1:
-                        scheduler_list = [scheduler[0]] # Get just the sensor-based scheduler
+                    if len(scheduler_list) > 1:
+                        scheduler_list = [scheduler_list[0]] # Get just the sensor-based scheduler
 
                     for scheduler in scheduler_list:
                         # Can the instrument be changed?
@@ -291,15 +292,19 @@ if __name__ == "__main__":
             if instrument.run_alone:
                 scheduler_list = instrument.scheduler
                 # TODO: This is a workaround; break scheduler list into Namespace objects
-                if len(scheduler) > 1:
-                    scheduler_list = [scheduler[1]] # Get just the iterative-based scheduler
+                if len(scheduler_list) > 1:
+                    scheduler_list = [scheduler_list[1]] # Get just the iterative-based scheduler
 
                 for scheduler in scheduler_list:
                     if scheduler.can_schedule():
                         # What is the new state that the instrument should be in? 
                         new_state = scheduler.change(0)
                         scheduler.update_budget(new_state, datetime.now()) # Update the internal scheduling budget (ex: light budget)
-                        instrument.device.trigger(state=new_state)
+                        
+                        if instrument_name in ["fan_1", "fan_2"]:
+                            instrument.device.trigger(state=None)
+                        else:
+                            instrument.device.trigger(state=new_state)
                         run_log.write(f"{_conn}, {new_state}, {time.time()}\n")
                     else:
                         if loop_iteration % logging_iteration == 0:

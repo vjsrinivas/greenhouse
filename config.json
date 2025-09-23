@@ -69,6 +69,6 @@
 		"fan_2": 22
 	},
 	"budgets": {
-		"light_1": {"seconds": 51780, "time_start": "7:00:00 AM", "time_end": "8:30:00 PM"}
+		"light_1": {"seconds": 51780, "time_start": "3:00:00 AM", "time_end": "8:30:00 PM"}
 	}
 }

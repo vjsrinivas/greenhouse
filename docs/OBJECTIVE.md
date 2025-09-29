@@ -14,9 +14,12 @@
 
 ### What Are The Prerequisites?
 
-This project is intended for educators that teach from middle to high schoolers. The educator should have a solid background in basic programming concepts and basic electrical concepts and skills.
+This project is intended for educators that teach from middle to high schoolers. The educator should have a solid background in basic programming concepts such as:
+* Declaring variables and defining and calling functions 
+* Object oriented programming (OOP)
+* Running Python programs and utilizing a command line interface (CLI)
 
-Some of the skills include but are limited to:
+As well as basic electrical concepts and skills; some of the skills include but are limited to:
 * Soldering
 * Wire splicing
 * Creating simple JST and DuPont-like connectors

@@ -13,7 +13,21 @@ This documentation will breakdown the high-level software architecture defined i
 
 ## Configuration Structure
 
-**TODO**
+A configuration file is used to do the following:
+* Define connection details to sensors and instruments
+* To determine the frequency of a sensor reading or instrument action
+* Which sensor should feed into what instrument
+* Meta-data related to data storage
+
+In this project, the configuration file is by default `config.json`, and the json structure is composed in the following structure:
+
+| Level          | Purpose                                         |
+|----------------|------------------------------------------------|
+| `log_path`     | Where logs are saved                            |
+| `devices`      | Configurations of sensors, actuators, cameras |
+| `relay_module` | Hardware relay pin mapping                      |
+| `budgets`      | Device operation schedules/time limits         |
+ 
 
 ## Sensor Interfacing
 
@@ -105,7 +119,7 @@ The typical usage for these sensor classes is in two parts:
 
 ## Relay Interfacing
 
-**TODO**
+In contrast to the sensors' reliance on the relatively complicated I2C interface, the TSL0012 relay module is addressable via a set of GPIO pins. Each relay module acts independently from one another, and each actively used relay module is connected to its respective GPIO pin on the Raspberry PI. We can use the `gpiozero` Python package to read or write a pin to a true/false state. 
 
 ## Scheduling Tasks
 

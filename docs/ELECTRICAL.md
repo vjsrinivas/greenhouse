@@ -7,3 +7,9 @@ For power distribution, there are three main components:
     * NOTE: If the specific surge protector (or any compact surge protectors), an alternative is potentially an AC distribution block with custom wiring application
 2. 
 3.
+
+## Layout:
+
+![General structure of the greenhouse's electrical components and how they're connected together](./images/greenhouse_diagram.svg)
+
+**TODO: Modify diagram to remove old unused components**

@@ -17,9 +17,15 @@ Install all prerequisite Python packages from this repo's `requirements.txt`:
 pip install -r requirements.txt
 ```
 
-Start the main program by simply running `main.py`:
+Start the greenhouse service (production):
+```bash
+bash setup.sh
+```
+
+Start the main program by simply running `main.py` (debugging):
 ```bash
 python main.py # or python3 main.py based on Python installation type
 ```
+
 ## Documentation 📚
-To construct, program, and execute the greenhouse, it is highly recommended you to read the [DOCS](DOCS.md).
+To construct, program, and run the greenhouse, it is highly recommended you to read the [DOCS](DOCS.md).

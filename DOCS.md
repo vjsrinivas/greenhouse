@@ -10,7 +10,7 @@ Please note that a basic level of prior knowledge is required, including fundame
 - [Materials](docs/MATERIALS.md) (0%)
 - [Structural Construction](docs/STRUCTURE.md) (25%)
 - [Electrical Construction](docs/ELECTRICAL.md) (10%)
-- [System Wiring and Plumbing](docs/WIRING.md) (0%)
+- [System Wiring and Plumbing](docs/WIRING.md) (40%)
 - [Programming](docs/PROGRAMMING.md) (50%)
 - [Execution](docs/EXECUTION.md) (90%)
 - [Notes](docs/NOTES.md) (0%)
@@ -27,3 +27,4 @@ This project has two distinctive licenses - a [CERN OHLv2 Permissive license](ht
 * (8/18/2025) - Add ISSUES.md document
 * (9/21/2025) - Add to PROGRAMMING.md
 * (9/28/2025) - Add to ELECTRICAL.md, EXECUTION.md, and PROGRAMMING.md
+* (10/12/2025) - Added diagrams and more details for WIRING.md

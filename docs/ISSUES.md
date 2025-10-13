@@ -46,3 +46,5 @@
      * Print the lip part
 * Gasket: https://www.digikey.com/en/products/detail/fix-supply/ZUSA-RC-926/17749535
 * Maybe a curtain above the mount take protects the enclosure
+* Replace power adapter with this https://www.meanwellusa.com/upload/pdf/IRM-30/IRM-30-spec.pdf
+* Seperate the power supply from the main enclosure

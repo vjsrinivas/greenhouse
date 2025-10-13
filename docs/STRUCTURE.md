@@ -2,41 +2,44 @@
 
 The physical structure of the greenhouse is first and foremost inspired from this [article](https://frostygarden.com/topics/building-a-diy-small-seedling-greenhouse-with-pvc/). This project adds onto it by adding some additional joints and structures for an electrical enclosure and some supports for lights and wiring.
 
-## Materials
-
-### Greenhouse Structure
+## Greenhouse Structure
 
 This is a quick breakdown of all the materials needed to construct the physical greenhouse. When this document refers to the "physical greenhouse", it refers to the structure and the lighting (which can work without the need for an electrical enclosure).
 
 ![TODO ADD CAD DIAGRAM OF WHAT PHYISCAL GREENHOUES]()
 
-* 90 Degree 3-way PVC joint (4-pack)
-* BR30 Indoor Plant Grow Light (or any 120V screw-in grow light bulb)
-* Pendant Light Cord
-* 10ft 1in diameter PVC pipe (10x)
-* Atleast a 12ft x 25ft UV-resistant Plastic Sheeting
-* An extension cord
-* 1/4in drip irrigation-rated tubing
-* 1in compatible plastic PVC clamps
-* Velcro
-* Double sided indoor mounting tape (NOTE: Might be removed in later revisions)
+### Frame Construction
 
-### Electronic Enclosure
+1. Print out the 3-corner, 4L, and 5-corner PVC joints defined in the [MATERIALS.md](./MATERIALS.md)
+2. Cut each 10ft PVC pipe into 1 meter and 2 meter segments (will be named as "short" and "long" pipes respectively)
+3. Slide a 4L PVC joint into 4 long and 4 short PVC pipes, with 2 long and 2 short pairs for the top and bottom of the greenhouse. Try to align the PVC joint in the center of each of the pipes.
 
-A breakdown of the electronics needed to automate watering, lighting, ventilation.
+![Picture of the 4L PVC joint slide across a PVC pipe](./images/mid_connector_4_corner.png)
+![Picture clarifying that the PVC joint should be centered](./images/mid_connector_4_corner_2.png)
 
-* SHT10 Temperature and Humidity Sensor
-* TSL2591 Light Sensor
-* GC0307 Camera Sensor
-* Raspberry Pi 5 (4GB)
-* Immersible Water Pump (5-6V)
-* PCA9548 I2C Multiplexer (STEMMA-QT)
-* 120mm Fan (5V)
-* DC Power Distribution
-* Multichannel Relay Module (e.g. TSL0012 8 Channel Relay)
-* 5V 8A (8A minimum) DC power adapter
-* If the DC Power Distribution module has a slot for relays, buy relays of varying amperages (2A, 3A, 5A)
-* 
+4. Assemble the bottom and the top frame of the greenhouse by connecting two long and two short PVC pipes with a 3-corner PVC joint.
+
+![Picture of base being joined together](./images/corner_connectors_1.png)
+![Picture of the bottom base all put together](./images/bottom_case.png)
+
+5. For the top frame, take an additional long and short pipe. Cut them in half and then cut each cut piece by a small margin (~2-3cm) to allow "breathing-room" in the joint.
+
+6. Connect the cropped long sides to the 5-corner PVC joint and to their adjacent side
+
+![Picture of the long and short sides being cut and being connected to the top frame](./images/put_top_together.png)
+
+7. Connect the bottom and top frames of the greenhouse together with supporting structures (which are just 8 short PVC pipes - this also means you should cut the 2m pipes you have into 2, 1m pipes)
+
+![Picture of the bottom and top frame being put together](./images/put_em_all_together.png)
 
 
-A detailed (and updated) list of materials is located in this [spreadsheet](https://docs.google.com/spreadsheets/d/1D5Wrt_z-Hwpw6NW9q0wttRs7WzhNt-r7_dHowY1t_wE/edit?usp=sharing). Please raise an issue in the repository if there any questions or issues found with the material list
+## Electrical Enclosure
+
+The electrical enclosure stores the following electrical components inside:
+
+- Raspberry Pi 5
+- Relay (TSL0012)
+- DC Power Distribution Block
+- DC Power Adapter
+- Surge Protector
+- 

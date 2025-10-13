@@ -51,6 +51,3 @@ On startup, the application checks if every sensor defined in the configuration 
 ```bash
 python relay.py --pin 23 --on # or whatever the pin you've assigned that specific relay to
 ```
-
-## Hardware
-### 

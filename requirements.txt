@@ -4,3 +4,6 @@ gpiozero==2.0.1
 loguru==0.7.3
 numpy==2.3.3
 opencv_python==4.11.0.86
+adafruit-circuitpython-tca9548a==0.8.2
+adafruit-circuitpython-sht31d==2.3.28
+adafruit-circuitpython-tsl2591==1.4.4

@@ -19,6 +19,7 @@ pip install -r requirements.txt
 
 Start the greenhouse service (production):
 ```bash
+cd services
 bash setup.sh
 ```
 

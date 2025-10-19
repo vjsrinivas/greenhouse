@@ -28,3 +28,4 @@ This project has two distinctive licenses - a [CERN OHLv2 Permissive license](ht
 * (9/21/2025) - Add to PROGRAMMING.md
 * (9/28/2025) - Add to ELECTRICAL.md, EXECUTION.md, and PROGRAMMING.md
 * (10/12/2025) - Added diagrams and more details for WIRING.md
+* (10/19/2025) - Added more pictures and to STRUCTURE.md

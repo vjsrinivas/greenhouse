@@ -6,7 +6,7 @@ The physical structure of the greenhouse is first and foremost inspired from thi
 
 This is a quick breakdown of all the materials needed to construct the physical greenhouse. When this document refers to the "physical greenhouse", it refers to the structure and the lighting (which can work without the need for an electrical enclosure).
 
-![TODO ADD CAD DIAGRAM OF WHAT PHYISCAL GREENHOUES]()
+![Image of the frame successfully constructed](./images/greenhouse_structure.jpg)
 
 ### Frame Construction
 
@@ -33,13 +33,36 @@ This is a quick breakdown of all the materials needed to construct the physical 
 ![Picture of the bottom and top frame being put together](./images/put_em_all_together.png)
 
 
-## Electrical Enclosure
+## Overlaying the Tarp
 
-The electrical enclosure stores the following electrical components inside:
+After the frame is constructed, we need to lay the UV-resistant plastic tarp on top of the frame. This part will take a little bit of pratice and will require the tarp's width to be a minimum of ~1.5x the length of the greenhouse (2m).
 
-- Raspberry Pi 5
-- Relay (TSL0012)
-- DC Power Distribution Block
-- DC Power Adapter
-- Surge Protector
-- 
+Run the tarp over the structure along its width. Make sure you give enough slack for the tarp to be tucked underneath the bottom of the structure. For the 2m sides and the bottom PVC pipes, we use PVC clamps to bind the tarp to the pipes. This construction went for one clamp in the middle of each exposed pipe segment:
+
+![Example of PVC clamps being used to keep the tarp on the PVC](./images/bracket_example.jpg)
+
+![Another example of PVC clamps](./images/bracket_example_2.jpg)
+
+![Final example of PVC clamps being placed on long side](./images/bracket_example_3.jpg)
+
+> [!NOTE]  
+> I did not take good visual documentation on this part. Totally on me, but I will have some diagrams that attempt to recreate what the tarp and folds should look like. If you need better documentation, check out the inspired post at the beginning of this doucment.
+
+
+As the wrap goes over the structure, two excess trianglular folds should appear on each corner. Like an envelope, fold the triangular folds towards each other on the short side of the greenhouse. They should overlap with one another. Press a clamp on the middle supporting pipe such that all three layers (the two folds and the flat layer)get pressed together. This will take some force. If the clamp is not staying in-place, use some strong tape or adhesive.
+
+## Electrical Enclosure Mounting
+
+### Mounting Brackets
+TODO
+
+### Trace Light Wiring Through PVC (Optional)
+ TODO
+
+### Tracing Wire Mesh
+ TODO
+
+## Access Points
+
+> [!CAUTION]  
+> In version 1, access points are just hacky flaps that are supposed to act as tent "flaps". I'm realizing that this is not practical. Future iteraitons will not have this kind of access point.

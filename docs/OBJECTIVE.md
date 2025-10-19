@@ -12,6 +12,9 @@
 	- Predefined schedules programmed into a central computer.
 	- Real-time sensor readings.
 
+
+![Image of the finished greenhouse (without plant bed)](./images/greenhouse_setup_diagram.png)
+
 ### What Are The Prerequisites?
 
 This project is intended for educators that teach from middle to high schoolers. The educator should have a solid background in basic programming concepts such as:

@@ -18,7 +18,9 @@ if __name__ == "__main__":
         "../devices/database.py",  
     ]
     OUTPUT_DIR = "./api/"
-    shutil.rmtree(OUTPUT_DIR)
+    if os.path.exists(OUTPUT_DIR):
+        shutil.rmtree(OUTPUT_DIR)
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
     MAIN_API_DOC = "./template/PROGRAMMING.md"
     OUTPUT_API_DOC = "./PROGRAMMING.md"
     IGNORE_CAPITALIZE = ["sht31d", "tsl2591"]
@@ -48,14 +50,14 @@ if __name__ == "__main__":
     
 
     with open(MAIN_API_DOC, "r") as f:
-        api_contents = list(map(str.strip, f.readlines()))
+        api_contents = f.readlines()
     api_call_idx = api_contents.index("{{API_DOC_APPLY}}")
     api_list = [Path(py_file).stem for py_file in new_md_files]    
     api_list = [py_file.capitalize() if not py_file in IGNORE_CAPITALIZE else py_file for py_file in api_list]
     api_links = [os.path.join(OUTPUT_DIR, _file) for _file in new_md_files]
     api_list = "\n".join([f"### [{py_file}]({api_links[i]})" for i,py_file in enumerate(api_list)])
     api_contents[api_call_idx] = api_list
-    api_str_contents = "\n".join(api_contents)
+    api_str_contents = "".join(api_contents)
 
     with open(OUTPUT_API_DOC, "w") as f:
         f.write(api_str_contents)

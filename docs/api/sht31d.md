@@ -156,8 +156,3 @@ Current temperature reading from the sensor.
 
 
 
-
-
----
-
-_This file was automatically generated via [lazydocs](https://github.com/ml-tooling/lazydocs)._

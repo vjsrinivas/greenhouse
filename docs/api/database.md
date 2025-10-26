@@ -209,8 +209,3 @@ update(table: str, data: dict, condition: str, params: Tuple[Any, ]) → None
 Update records in a table based on a condition. 
 
 
-
-
----
-
-_This file was automatically generated via [lazydocs](https://github.com/ml-tooling/lazydocs)._

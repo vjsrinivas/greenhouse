@@ -25,8 +25,10 @@ if __name__ == "__main__":
     OUTPUT_API_DOC = "./PROGRAMMING.md"
     IGNORE_CAPITALIZE = ["sht31d", "tsl2591"]
     processes = []
+    os.environ["PYTHONPATH"] = "../"
+
     for doc in DOCS:
-        proc = Popen(["lazydocs", doc, "--output-path", OUTPUT_DIR])
+        proc = Popen(["lazydocs", doc, "--output-path", OUTPUT_DIR, "--no-watermark"])
         processes.append(proc)
 
     [proc.wait() for proc in processes]

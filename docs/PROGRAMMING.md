@@ -142,5 +142,8 @@ Some instruments require more than just sensor input. For example, the `LightBul
 ### [Database](./api/database.md)
 ### [Fan](./api/fan.md)
 ### [Heater](./api/heater.md)
+### [Light](./api/light.md)
 ### [sht31d](./api/sht31d.md)
+### [Soil](./api/soil.md)
 ### [tsl2591](./api/tsl2591.md)
+### [Water](./api/water.md)

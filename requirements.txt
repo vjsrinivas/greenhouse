@@ -1,4 +1,4 @@
-adafruit_seesaw==1.0
+adafruit-circuitpython-seesaw
 gpiozero==2.0.1
 loguru==0.7.3
 numpy==2.3.3

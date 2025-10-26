@@ -2,6 +2,9 @@
 
 ## Greenhoues Structure
 
+> [!NOTE]  
+> These materials are subject to change as new iterations come out.
+
 * 90 Degree 3-way PVC joint (4-pack)
 * BR30 Indoor Plant Grow Light (or any 120V screw-in grow light bulb)
 * Pendant Light Cord
@@ -14,6 +17,9 @@
 * Double sided indoor mounting tape (NOTE: Might be removed in later revisions)
 
 ## Electronic Enclosure
+
+> [!NOTE]  
+> These materials are subject to change as new iterations come out.
 
 A breakdown of the electronics needed to automate watering, lighting, ventilation.
 

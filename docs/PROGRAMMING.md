@@ -2,7 +2,7 @@
 
 ## Overall Structure
 
-This documentation will breakdown the high-level software architecture defined in [STRUCTURE](STRUCTURE.md) into the following subitems:
+This documentation will breakdown the high-level software architecture defined in [ELECTRICAL](ELECTRICAL.md) into the following subitems:
     
 * Configuration Structure
 * Sensor Interfacing
@@ -31,7 +31,7 @@ In this project, the configuration file is by default `config.json`, and the jso
 
 ## Sensor Interfacing
 
-All the sensors defined in STRUCTURE are I2C-based devices (excluding the USB-based cameras). To communicate with the I2C-based sensors, we utilize the `busio`, `board`, and sensor-specific packages (ex: for the TSL2591, utilizing the `adafruit_tca9548a` package). For the cameras, we utilize OpenCV2's library to connect and retrieve images.
+All the sensors defined in ELECTRICAL are I2C-based devices (excluding the USB-based cameras). To communicate with the I2C-based sensors, we utilize the `busio`, `board`, and sensor-specific packages (ex: for the TSL2591, utilizing the `adafruit_tca9548a` package). For the cameras, we utilize OpenCV2's library to connect and retrieve images.
 
 Each sensor is defined in its own Python file under the `{ROOT}/devices/sensor/` folder and have a shared structure. Typically, a given sensor will have the following as a minimum skeleton:
 
@@ -123,7 +123,14 @@ In contrast to the sensors' reliance on the relatively complicated I2C interface
 
 ## Scheduling Tasks
 
-**TODO**
+> [!NOTE]  
+> Scheduler objects are subject to change while this repository is still under development.
+
+This program utilizes the concept of schedulers to ensure that each instrument and sensor gets triggered at a consistent rate. Each instrument or sensor gets a `DeviceScheduler` or `SensorScheduler` assigned to it respectively. Each scheduler object has an `interval` that determines when the instrument or sensor can trigger. This is the extent of scheduling behavior for `SensorScheduler` since sensors are just there to provide environmental information. For both kinds of schedulers, we can determine when an instrument/sensor is ready to be triggered or sampled with the `can_schedule` function.
+
+For instruments, some of them have more complicated behaviors. To determine if an instrument needs to be in a certain state (on or off), we use the `change` function. The change function takes in an appropriate sensor value that compares that with the sensor threshold. The comparison type and sensor threshold value are parts of the `DeviceScheduler` class initializer. The value determined by the `change` function is then fed into the instrument to set it to the right state.
+
+Some instruments require more than just sensor input. For example, the `LightBulb` instrument is controlled by both the light sensor, a light budget, and a daterange in which the instrument can be considered for a certain state. For the last two potenital criterias, we have a `in_timerange` and `update_budget` function. The `update_budget` is only uesd to update the state of the budget. The utilization of the budget is done in `can_schedule` if a budget is defined.
 
 ## Main Loop
 
@@ -133,4 +140,29 @@ In contrast to the sensors' reliance on the relatively complicated I2C interface
 
 ### Sensor
 
-#### SHT
+
+
+
+#### SHT31-D
+
+#### TSL2591
+
+#### FusedLightSensor
+
+### Instrument
+
+#### Fan
+
+#### LightBulb
+
+#### Heater
+
+Not implemented at this time.
+
+### Scheduler
+
+#### Scheduler (abstract)
+
+#### DeviceScheduler
+
+#### SensorScheduler

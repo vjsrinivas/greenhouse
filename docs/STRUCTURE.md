@@ -54,13 +54,21 @@ As the wrap goes over the structure, two excess trianglular folds should appear 
 ## Electrical Enclosure Mounting
 
 ### Mounting Brackets
-TODO
+
+3D print a [top](./) and [bottom](./) mounting bracket for this part. We are going to take advantage of the enclosure's metallic mounting braces to attach it to the center vertical PVC pipe. The mounting brackets will click into the holes in the mounting brace.
+
+[PICTURE OF ENCLOSURE+BRACKETS]
+
+Afterwards, slide the top and bottom brackets through the PVC until it is at a desired height. Take a M3-compatiable drill bit (or use a screwdriver) to create a hole where the two M3 screws with go on the back of the mounting bracket. These scews will hold the bracket and the entire enclosure up.
+
+[PICTURE OF BRACKETS BEING SCREWED INTO PVC]
+
 
 ### Trace Light Wiring Through PVC (Optional)
- TODO
+ Cleanest way to place the center light in the greenhouse is to pass the wire through the 5-way joint and through the PVC pipe going towards the electrical enclosure. Cut that given PVC pipe where you want the wire to escape, and add a 3-way T-shape PVC joint to channel the wire out. For a permanent fit, use a liquid adhesive to join the cut PVCs together with the PVC joint. Otherwise, you might see a dip in the top part of your greenhouse.
 
 ### Tracing Wire Mesh
- TODO
+ To ensure that small sensor wires are not damaged and are organized cleanly, utilize a wire mesh. Fold the sensor wires into the mesh and then use tape or zip ties to attach the wire meshes onto the PVC pipe.
 
 ## Access Points
 

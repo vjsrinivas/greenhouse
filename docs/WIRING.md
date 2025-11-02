@@ -46,4 +46,4 @@ To connect to the TSL0012, the Raspberry Pi uses one GPIO pin per relay module. 
 
 ## Relay
 
-To power the TSL0012, connect the VCC pin to one of the channels in the DC PD. Connect the ground pin to the ground pin of the Raspberry Pi [VERIFY]. This is important in order to properly power the TSL0012 with a single power source. [TLAK ABOUT MAKING SURE THE JUMPER IS SET PROPERLY].
+To power the TSL0012, connect the VCC pin to one of the channels in the DC PD. Connect the ground pin to the ground pin of the Raspberry Pi [VERIFY]. This is important in order to properly power the TSL0012 with a single power source. The TSL0012 has a jumper that tells the board to power both the relay modules and the GPIO circuits from the same 5V input or use seperate power sources. Set the jumper to the former for this to work with this greenhouse design. 

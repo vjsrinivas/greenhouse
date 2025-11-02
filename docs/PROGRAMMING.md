@@ -22,11 +22,11 @@ A configuration file is used to do the following:
 In this project, the configuration file is by default `config.json`, and the json structure is composed in the following structure:
 
 | Level          | Purpose                                         |
-|----------------|------------------------------------------------|
-| `log_path`     | Where logs are saved                            |
-| `devices`      | Configurations of sensors, actuators, cameras |
+|----------------|-------------------------------------------------|
+| `log_path`     | Where the database logs are saved               |
+| `devices`      | Configurations of sensors, actuators, cameras   |
 | `relay_module` | Hardware relay pin mapping                      |
-| `budgets`      | Device operation schedules/time limits         |
+| `budgets`      | Device operation schedules/time limits          |
  
 
 ## Sensor Interfacing
@@ -117,6 +117,8 @@ The typical usage for these sensor classes is in two parts:
 * Initialize the class object at program startup (ex: `sensor_obj = SensorExample()`)
 * Call class object within the program (ex: `data = sensor_obj()`)
 
+**NOTE:** To run without the devices connected (usually to debug other parts of the greenhouse code), every sensor, instrument, and the relay class have a `fake_data` attribute given. If this argument is set to true, every sensor reading, instrument trigger, or anything that utilizes a GPIO or I2C function will be "emulated". This means we report back a random set of numbers or don't really do anything.
+
 ## Relay Interfacing
 
 In contrast to the sensors' reliance on the relatively complicated I2C interface, the TSL0012 relay module is addressable via a set of GPIO pins. Each relay module acts independently from one another, and each actively used relay module is connected to its respective GPIO pin on the Raspberry PI. We can use the `gpiozero` Python package to read or write a pin to a true/false state. 
@@ -134,7 +136,20 @@ Some instruments require more than just sensor input. For example, the `LightBul
 
 ## Main Loop
 
-**TODO**
+> [!NOTE]  
+> Main loop logic is subject to change while this repository is still under development.
+
+The program starts off in `main.py` and runs a large while loop that does the following:
+* Checks if each sensor in the sensor tree is ready to be read
+    * If the sensor is, then read from that sensor and put it in a `Queue` along with the instruments it is partnered up with to interact
+* Check if the interaction queue is not empty
+    * If it is not empty, then take the sensor reading and the intended instrument, and find if the instrument is ready to be interacted with
+        * If the instrument is ready to be interacted with, pass the sensor readings into the instrument to find the proper state the instrument should be in
+        * Once the state is determined, set the instrument to that state
+* Check if any instrument in the instrument tree is iterative and needs to be triggered
+    * If an iterative instrument needs to be triggered, then set the instrument's state accordingly
+
+This is a high-level overview of the large while loop. Refer to the code in `main.py` for more details on each part.
 
 ## API Reference
 

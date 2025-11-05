@@ -4,6 +4,7 @@ from typing import *
 import busio
 from loguru import logger
 import adafruit_tca9548a
+import random
 
 class TemperatureSensor:
     """
@@ -43,7 +44,8 @@ class TemperatureSensor:
         description: str,
         temp_unit: Literal["celsius", "fahrenheit"] = "celsius",
         skip_on_fail=True,
-        use_multi_channel=False
+        use_multi_channel=False,
+        fake_data=False
     ):
         # Check if given temperature unit is valid
         self.__sunits__ = ["celsius", "fahrenheit"]
@@ -60,10 +62,12 @@ class TemperatureSensor:
         self.skip_on_fail = skip_on_fail
         self._i2c_fail = False
         self.use_multi = use_multi_channel
+        self.fake_data = fake_data
 
         # Connect to temp sensor:
-        self.__connect__()
-        self.__init_probe__()
+        if not self.fake_data:
+            self.__connect__()
+            self.__init_probe__()
     
         # Push off bad first data:
         if not self._i2c_fail:
@@ -121,6 +125,9 @@ class TemperatureSensor:
             >>> sensor.temperature
             21.7
         """
+        if self.fake_data:
+            return random.random()*100.0
+
         if self.temp_unit == "celsius":
             return self.sht31d.temperature
         elif self.temp_unit == "fahrenheit":
@@ -143,6 +150,8 @@ class TemperatureSensor:
             >>> sensor.readable
             True
         """
+        if self.fake_data:
+            return True
         return not self._i2c_fail
 
     @property
@@ -158,6 +167,8 @@ class TemperatureSensor:
             >>> sensor.readable
             True
         """
+        if self.fake_data:
+            return random.random()*100.0
         return self.sht31d.relative_humidity
 
     def __init_probe__(self, probe_attempts=5):

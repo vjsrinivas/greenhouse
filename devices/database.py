@@ -2,7 +2,21 @@ import sqlite3
 from typing import *
 import os
 from loguru import logger
+from dataclasses import dataclass, field
+from pathlib import Path
 
+@dataclass
+class LogRecord:
+    name: str = field()
+    level: str = field(default="INFO")
+    message: Optional[str] = field(default="")
+    metadata: Optional[str] = field(default="")
+
+@dataclass
+class ImageRecord:
+    name: str = field()
+    path: str = field()
+    active: bool = field(default=True)
 
 class SQLiteAPI:
     """A simple SQLite database interface using only native Python modules."""
@@ -69,6 +83,9 @@ class SQLiteAPI:
 
 class DatabaseHandler:
     def __init__(self, db_file_path: str):
+        db_dir = Path(db_file_path).parent
+        os.makedirs(db_dir, exist_ok=True)
+
         db_exists = os.path.exists(db_file_path)
         self.db_file_path = db_file_path
         self.connector = SQLiteAPI(db_file_path)
@@ -96,7 +113,8 @@ class DatabaseHandler:
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 image_name TEXT NOT NULL,
-                image_path TEXT NOT NULL
+                image_path TEXT NOT NULL,
+                active BOOLEAN NOT NULL
             );
             """,
             """
@@ -112,17 +130,35 @@ class DatabaseHandler:
 
         logger.info("✅ Database schema generated successfully.")
 
-    def log(self, device: str, data: Any):
+    def log(self, data: LogRecord):
         query = (
             "INSERT INTO logs (device, level, message, metadata) VALUES (?, ?, ?, ?)"
         )
-        params = (device,)
+        params = (data.name, data.level, data.message, data.metadata)
         self.connector.execute(query, params)
 
-    def record_image(self, image_data: Dict):
-        query = f"INSERT INTO images (image_name, image_path) VALUES (?, ?)"
-        params = ("image_name_1", "image_path_1")
+    def record_image(self, image_data: ImageRecord):
+        query = "INSERT INTO images (image_name, image_path, active) VALUES (?, ?, ?)"
+        params = (image_data.name, image_data.path, True)
         self.connector.execute(query, params)
+
+    def record_delete_image(self, image_name:str):
+        # Find the image in the table and set the active column to False
+        query = """
+            SELECT *
+            FROM images
+            WHERE image_name = ?
+        """
+        params = (image_name, )
+        row = self.connector.fetch_one(query, params=params)
+        if row:
+            self.connector.execute("""
+                UPDATE images
+                SET active = 0
+                WHERE image_name = ?
+            """, (image_name,))
+        else:
+            raise ValueError(f"Cannot find {image_name} in image table!")
 
     def heartbeat(self):
         query = "INSERT INTO events DEFAULT VALUES;"

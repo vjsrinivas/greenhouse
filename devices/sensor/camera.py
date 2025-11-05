@@ -35,7 +35,7 @@ class GC0307:
         >>> cam.release()
     """
 
-    def __init__(self, cam_id: int, camera_description: str, resolution_profile, save_path:str):
+    def __init__(self, cam_id: int, camera_description: str, resolution_profile, save_path:str, fake_data=False):
         """Initializes the GC0307 camera interface.
 
         Args:
@@ -57,6 +57,7 @@ class GC0307:
         self.__cap__.set(cv2.CAP_PROP_FRAME_WIDTH, self.res[0])
         self.__cap__.set(cv2.CAP_PROP_FRAME_HEIGHT, self.res[1])
         self.save_path = os.path.join(save_path, camera_description)
+        self.fake_data = fake_data
         os.makedirs(self.save_path, exist_ok=True)
 
     def read(self) -> Tuple[bool, np.ndarray]:
@@ -75,6 +76,8 @@ class GC0307:
             >>> if ret:
             ...     cv2.imshow("Frame", frame)
         """
+        if self.fake_data:
+            return (True, np.zeros((self.res[1], self.res[0]), dtype=np.uint8))
         return self.__cap__.read()
 
     def release(self):
@@ -86,7 +89,8 @@ class GC0307:
         Example:
             >>> cam.release()
         """
-        self.__cap__.release()
+        if not self.fake_data:
+            self.__cap__.release()
 
     @property
     def readable(self):
@@ -99,6 +103,8 @@ class GC0307:
             >>> if cam.readable:
             ...     print("Camera is ready.")
         """
+        if self.fake_data:
+            return True
         return self.__cap__.isOpened()
 
     @property
@@ -141,7 +147,7 @@ class GC0307:
         if not ret:
             raise ValueError("Failed to read frame!")
         cv2.imwrite(_image_path, img)
-        return {"save_path": _image_path}
+        return {"name": timestamp_str, "save_path": _image_path}
 
 if __name__ == "__main__":
     cam = GC0307(2, "main", GC0307_RESOLUTION.RES640P, "camera_1")

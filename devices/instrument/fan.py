@@ -28,7 +28,7 @@ class Fan:
         {'state': False}
     """
 
-    def __init__(self, device_name: str, relay_module, duration=10):
+    def __init__(self, device_name: str, relay_module, duration=10, fake_data=False):
         """Initializes a new Fan instance.
 
         Args:
@@ -47,6 +47,7 @@ class Fan:
         self.__duration__ = duration
         self.thread_start = False
         self.active_thread = None
+        self.fake_data = fake_data
 
     def start_fan(self):
         """Turns the fan on by activating the corresponding relay.
@@ -57,7 +58,8 @@ class Fan:
         Example:
             >>> fan.start_fan()  # Activates the fan
         """
-        self.__relay__[self.__dev__].on()
+        if not self.fake_data:
+            self.__relay__[self.__dev__].on()
 
     def stop_fan(self):
         """Turns the fan off by deactivating the corresponding relay.
@@ -68,7 +70,8 @@ class Fan:
         Example:
             >>> fan.stop_fan()  # Deactivates the fan
         """
-        self.__relay__[self.__dev__].off()
+        if not self.fake_data:
+            self.__relay__[self.__dev__].off()
 
     def __thread_function__(self, duration):
         """Internal function to run the fan for a specified duration in a separate thread.

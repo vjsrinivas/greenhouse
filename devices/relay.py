@@ -1,7 +1,6 @@
 import os
 import sys
 
-from gpiozero import LED, OutputDevice
 import time
 from typing import *
 
@@ -11,14 +10,19 @@ except ImportError:
     pass
 
 class RelayModule:
-    def __init__(self, pin_mapping: Dict):
+    def __init__(self, pin_mapping: Dict, fake_data=False):
         """
         pin_mapping (Dict) -> "device_str": pin_int
         """
         self.__pin__ = pin_mapping
-        self.relays = {}
-        for dev, pin in self.__pin__.items():
-            self.relays[dev] = OutputDevice(pin, active_high=False, initial_value=False)
+        self.fake_data = fake_data
+
+        if not self.fake_data:
+            from gpiozero import LED, OutputDevice
+
+            self.relays = {}
+            for dev, pin in self.__pin__.items():
+                self.relays[dev] = OutputDevice(pin, active_high=False, initial_value=False)
 
     def __device_chk__(self, device_name: str):
         assert device_name in self.__pin__, "{} is not a key in pin mapping!".format(
@@ -26,15 +30,21 @@ class RelayModule:
         )
 
     def on(self, device_name: str):
-        self.__device_chk__(device_name)
-        self.relays[device_name].on()
+        if not self.fake_data:
+            self.__device_chk__(device_name)
+            self.relays[device_name].on()
 
     def off(self, device_name: str):
-        self.__device_chk__(device_name)
-        self.relays[device_name].off()
+        if not self.fake_data:
+            self.__device_chk__(device_name)
+            self.relays[device_name].off()
 
     def __repr__(self):
         _str = "Relay Status:\n"
+
+        if self.fake_data:
+            return _str
+        
         for dev, pin in self.__pin__.items():
             _relay = self.relays[dev]
             if _relay.value == 1:
@@ -46,8 +56,10 @@ class RelayModule:
             # _str += "{} - {}\n".format(dev, _value_str)
             _str += "{:^15} - {} ({})\n".format(dev, _value, _value_str)
         return _str
-
+    
     def __getitem__(self, key:str):
+        if self.fake_data:
+            return None
         return self.relays[key]
 
 

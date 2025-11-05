@@ -8,6 +8,7 @@ import adafruit_tca9548a
 from typing import *
 import numpy as np
 import time
+import random
 
 class FusedLightSensor:
     """Aggregates multiple TSL2591 light sensors into a single logical sensor.
@@ -29,10 +30,12 @@ class FusedLightSensor:
         {'lux': 432.5, 'infrared': 120.3, 'spectrum': 550.1}
     """
 
-    def __init__(self, addresses:List[int], descriptions:List[str], skip_on_fail=True, use_multi_channel=False):
+    def __init__(self, addresses:List[int], descriptions:List[str], skip_on_fail=True, use_multi_channel=False, fake_data=False):
+        self.fake_data = fake_data
         self.addresses = addresses # direct i2c connection
         self.descriptions = descriptions
-        self.sensors = [LightSensor(addresses[i], descriptions[i], skip_on_fail, use_multi_channel) for i in range(len(addresses))]
+        self.sensors = [LightSensor(addresses[i], descriptions[i], skip_on_fail, use_multi_channel, fake_data=fake_data) for i in range(len(addresses))]
+
 
     @property
     def readable(self):
@@ -41,6 +44,8 @@ class FusedLightSensor:
         Returns:
             bool: True if at least one sensor is active, False otherwise.
         """
+        if self.fake_data:
+            return True
         return any([sensor.readable for sensor in self.sensors])
 
     @property
@@ -50,6 +55,8 @@ class FusedLightSensor:
         Returns:
             float: Mean lux value.
         """
+        if self.fake_data:
+            return random.random()*100.0
         return float(np.mean( [sensor.lux for sensor in self.sensors] ))
 
     @property
@@ -59,6 +66,8 @@ class FusedLightSensor:
         Returns:
             float: Mean infrared value.
         """
+        if self.fake_data:
+            return random.random()*100.0
         return float(np.mean( [sensor.infrared for sensor in self.sensors] ))
 
     @property
@@ -68,6 +77,8 @@ class FusedLightSensor:
         Returns:
             float: Mean full spectrum value.
         """
+        if self.fake_data:
+            return random.random()*100.0
         return float(np.mean( [sensor.spectrum for sensor in self.sensors] ))
 
     @property
@@ -110,16 +121,18 @@ class LightSensor:
         {'lux': 432.5, 'infrared': 120.3, 'spectrum': 550.1}
     """
 
-    def __init__(self, address: int, description: str, skip_on_fail=True, use_multi_channel=False):
+    def __init__(self, address: int, description: str, skip_on_fail=True, use_multi_channel=False, fake_data=False):
         self.addr = address # direct i2c connection
         self.use_multi = use_multi_channel
         self.name = description
         self.skip_on_fail = skip_on_fail
         self._i2c_fail = False
+        self.fake_data = fake_data
 
         # Connect to temp sensor:
-        self.__connect__()
-        self.__init_probe__()
+        if not self.fake_data:
+            self.__connect__()
+            self.__init_probe__()
 
     def __connect__(self):
         """Connects to the TSL2591 sensor over I²C.
@@ -156,6 +169,8 @@ class LightSensor:
         Returns:
             bool: True if the sensor is active, False if I²C connection failed.
         """
+        if self.fake_data:
+            return True
         return not self._i2c_fail
 
     @property
@@ -165,6 +180,8 @@ class LightSensor:
         Returns:
             float: Lux value.
         """
+        if self.fake_data:
+            return random.random()*100.0
         return self.tsl2591.lux
 
     @property
@@ -174,6 +191,8 @@ class LightSensor:
         Returns:
             float: Infrared value.
         """
+        if self.fake_data:
+            return random.random()*100.0
         return self.tsl2591.infrared
 
     @property
@@ -183,6 +202,8 @@ class LightSensor:
         Returns:
             float: Full spectrum value.
         """
+        if self.fake_data:
+            return random.random()*100.0
         return self.tsl2591.full_spectrum
 
     def __init_probe__(self, probe_attempts=5):

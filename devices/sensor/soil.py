@@ -6,6 +6,7 @@ from adafruit_seesaw.seesaw import (
     Seesaw,
 )  # Generic soil sensor that can be used for Adafruit STEMMA soil sensor
 import adafruit_tca9548a
+import random
 
 class SoilSensor:
     """A class for interfacing with Adafruit STEMMA-compatible soil sensors (Seesaw).
@@ -39,7 +40,8 @@ class SoilSensor:
         description: str,
         temp_unit: Literal["celsius", "fahrenheit"] = "celsius",
         skip_on_fail=True,
-        use_multi_channel=False
+        use_multi_channel=False,
+        fake_data=False
     ):
         """Initializes the soil sensor and establishes an I²C connection.
 
@@ -73,9 +75,11 @@ class SoilSensor:
         self.skip_on_fail = skip_on_fail
         self._i2c_fail = False
         self.use_multi = use_multi_channel
+        self.fake_data = fake_data
 
         # Connect to soil sensor:
-        self.__connect__()
+        if not self.fake_data:
+            self.__connect__()
 
     def __connect__(self):
         """Initializes the I²C interface and connects to the soil sensor.
@@ -123,6 +127,8 @@ class SoilSensor:
             >>> if sensor.readable:
             ...     print("Sensor connected and active.")
         """
+        if not self.fake_data:
+            return True
         return not self._i2c_fail
 
     @property
@@ -139,6 +145,8 @@ class SoilSensor:
             >>> print(sensor.moisture)
             512
         """
+        if self.fake_data:
+            return random.random()*100.0
         return self.stemma_obj.moisture_read()
 
     @property
@@ -156,6 +164,9 @@ class SoilSensor:
             >>> print(sensor.temperature)
             24.3
         """
+        if self.fake_data:
+            return random.random()*100.0
+
         temp = self.stemma_obj.get_temp()
         if self.temp_unit == "celsius":
             return temp

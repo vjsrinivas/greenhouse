@@ -21,7 +21,7 @@ class LightBulb:
         {'state': False}
     """
 
-    def __init__(self, device_name: str, relay_module: RelayModule):
+    def __init__(self, device_name: str, relay_module: RelayModule, fake_data=False):
         """Initializes a LightBulb instance.
 
         Args:
@@ -34,6 +34,7 @@ class LightBulb:
         self.__relay__ = relay_module
         self.__dev__ = device_name
         self.__state__ = False  # False -> off; True -> on
+        self.fake_data = fake_data
 
     def start_light(self):
         """Turns the light on by activating the corresponding relay.
@@ -45,7 +46,8 @@ class LightBulb:
         Example:
             >>> bulb.start_light()
         """
-        self.__relay__[self.__dev__].on()
+        if not self.fake_data:
+            self.__relay__[self.__dev__].on()
 
     def stop_light(self):
         """Turns the light off by deactivating the corresponding relay.
@@ -57,7 +59,8 @@ class LightBulb:
         Example:
             >>> bulb.stop_light()
         """
-        self.__relay__[self.__dev__].off()
+        if not self.fake_data:
+            self.__relay__[self.__dev__].off()
 
     @property
     def keys(self) -> list[str]:

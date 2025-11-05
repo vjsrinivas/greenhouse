@@ -25,7 +25,7 @@ class WaterPump:
         >>> pump.trigger(True)  # Starts the watering cycle in a background thread
     """
 
-    def __init__(self, device_name: str, relay_module: RelayModule, period_spacing_sec: int = 10, period: int = 5):
+    def __init__(self, device_name: str, relay_module: RelayModule, period_spacing_sec: int = 10, period: int = 5, fake_data=False):
         """Initializes the WaterPump instance.
 
         NOTE: This class is timer-based only. Future addition
@@ -47,6 +47,7 @@ class WaterPump:
         self.__state__ = False
         self.period_spacing_sec = period_spacing_sec  # seconds between cycles
         self.period = period # seconds
+        self.fake_data = fake_data
 
         self.thread_duration = 0.0
         self.thread_start = False
@@ -62,7 +63,8 @@ class WaterPump:
         Example:
             >>> pump.start_pump()
         """
-        self.__relay__[self.__dev__].on()
+        if not self.fake_data:
+            self.__relay__[self.__dev__].on()
 
     def stop_pump(self):
         """Deactivates the water pump by switching off the relay.
@@ -74,7 +76,8 @@ class WaterPump:
         Example:
             >>> pump.stop_pump()
         """
-        self.__relay__[self.__dev__].off()
+        if not self.fake_data:
+            self.__relay__[self.__dev__].off()
 
     def __thread_function__(self, period_spacing_sec: int | float = 10, period_sec: int | float = 5):
         """Internal function to run the pump in a timed cycle using a background thread.
@@ -99,12 +102,13 @@ class WaterPump:
 
         while True:
             if period_spacing_sec != -1:
-                # NOTE: Enable once water bucket is filled with water
-                # self.stop_pump()
+                if not self.fake_data:
+                    # NOTE: Enable once water bucket is filled with water
+                    # self.stop_pump()
 
-                time.sleep(period_spacing_sec)
-                # NOTE: Enable once water bucket is filled with water
-                # self.start_pump()
+                    time.sleep(period_spacing_sec)
+                    # NOTE: Enable once water bucket is filled with water
+                    # self.start_pump()
             t2 = time.time()
             if t2-t1 > period_sec:
                 break

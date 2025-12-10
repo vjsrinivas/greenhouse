@@ -8,6 +8,7 @@ Please note that a basic level of prior knowledge is required, including fundame
 ## Table of Contents:
 - [Objective](docs/OBJECTIVE.md) (100%)
 - [Materials](docs/MATERIALS.md) (0%)
+- [3D Prints](docs/PRINTS.md) (100%)
 - [Structural Construction](docs/STRUCTURE.md) (25%)
 - [Electrical Construction](docs/ELECTRICAL.md) (10%)
 - [System Wiring and Plumbing](docs/WIRING.md) (40%)

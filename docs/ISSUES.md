@@ -48,3 +48,5 @@
 * Maybe a curtain above the mount take protects the enclosure
 * Replace power adapter with this https://www.meanwellusa.com/upload/pdf/IRM-30/IRM-30-spec.pdf
 * Seperate the power supply from the main enclosure
+* Weater-based heating of soil and air:
+    * Plastic tubing laid out inside soil at the very bottom; circulate warm water to heat the soil (and maybe move it above soil to warm some of the air)

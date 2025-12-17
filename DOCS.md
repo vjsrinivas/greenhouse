@@ -6,16 +6,15 @@ This document serves as the master reference for all documentation related to th
 Please note that a basic level of prior knowledge is required, including fundamental crafting skills, beginner-level programming, intermediate computing concepts, and basic electrical skills (e.g., soldering and wiring).
 
 ## Table of Contents:
-- [Objective](docs/OBJECTIVE.md) (100%)
-- [Materials](docs/MATERIALS.md) (0%)
-- [3D Prints](docs/PRINTS.md) (100%)
+- [Objective](docs/OBJECTIVE.md)
+- [Materials](docs/MATERIALS.md)
+- [3D Prints](docs/PRINTS.md)
 - [Structural Construction](docs/STRUCTURE.md) (25%)
 - [Electrical Construction](docs/ELECTRICAL.md) (10%)
 - [System Wiring and Plumbing](docs/WIRING.md) (40%)
-- [Programming](docs/PROGRAMMING.md) (50%)
+- [Programming](docs/PROGRAMMING.md)
 - [Execution](docs/EXECUTION.md) (90%)
-- [Notes](docs/NOTES.md) (0%)
-- [Known Issues](docs/ISSUES.md) (100%)
+- [Known Issues](docs/ISSUES.md)
 
 ## License
 
@@ -30,3 +29,4 @@ This project has two distinctive licenses - a [CERN OHLv2 Permissive license](ht
 * (9/28/2025) - Add to ELECTRICAL.md, EXECUTION.md, and PROGRAMMING.md
 * (10/12/2025) - Added diagrams and more details for WIRING.md
 * (10/19/2025) - Added more pictures and to STRUCTURE.md
+* (12/16/2025) - Added [PRINT.md](./docs/PRINT.md) and more diagrams

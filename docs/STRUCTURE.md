@@ -57,11 +57,11 @@ As the wrap goes over the structure, two excess trianglular folds should appear 
 
 3D print a [top](./) and [bottom](./) mounting bracket for this part. We are going to take advantage of the enclosure's metallic mounting braces to attach it to the center vertical PVC pipe. The mounting brackets will click into the holes in the mounting brace.
 
-[PICTURE OF ENCLOSURE+BRACKETS]
+![Slide central short-side PVC pipe into both top and bottom enclosure bracket](./images/enclosure_diagram.png)
 
 Afterwards, slide the top and bottom brackets through the PVC until it is at a desired height. Take a M3-compatiable drill bit (or use a screwdriver) to create a hole where the two M3 screws with go on the back of the mounting bracket. These scews will hold the bracket and the entire enclosure up.
 
-[PICTURE OF BRACKETS BEING SCREWED INTO PVC]
+![Screw M3 bolts into the enclosure brackets to secure the enclosure to the PVC pipe](./images/screw_in_enclosure_diagram.png)
 
 
 ### Trace Light Wiring Through PVC (Optional)
@@ -74,3 +74,5 @@ Afterwards, slide the top and bottom brackets through the PVC until it is at a d
 
 > [!CAUTION]  
 > In version 1, access points are just hacky flaps that are supposed to act as tent "flaps". I'm realizing that this is not practical. Future iteraitons will not have this kind of access point.
+
+To create the access points, make a vertical cut in the middle on one of the long side along the middle vertical PVC struct. Then, cut some velcro straps into small segments, and apply one part of each velcro segment to a flap and one to the middle vertical PVC struct.

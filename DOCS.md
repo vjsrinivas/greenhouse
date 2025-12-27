@@ -11,9 +11,8 @@ Please note that a basic level of prior knowledge is required, including fundame
 - [3D Prints](docs/PRINTS.md)
 - [Structural Construction](docs/STRUCTURE.md) (25%)
 - [Electrical Construction](docs/ELECTRICAL.md) (10%)
-- [System Wiring and Plumbing](docs/WIRING.md) (40%)
 - [Programming](docs/PROGRAMMING.md)
-- [Execution](docs/EXECUTION.md) (90%)
+- [Execution](docs/EXECUTION.md)
 - [Known Issues](docs/ISSUES.md)
 
 ## License

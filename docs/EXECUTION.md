@@ -43,7 +43,7 @@ Always double-check that all your wiring is secure and organized (hopefully bett
 
 ## Software
 ### Monitoring Logs
-When creating the systemd configuration, the logs will be recorded in `[INSERT SYSTEMD COMMAND FOR LOGS]`. The logs are also recorded locally in the `/${GREENHOUSE}/logs` via loguru. The loguru configuration is setup in a way that logs expire after a X-amount of time.
+When creating the systemd configuration, the logs will be recorded in `journalctl -u greenhouse.service`. The logs are also recorded locally in an SQLite database. Refer to [PROGRAMMING.md](./PROGRAMMING.md#database) for more information on the database structure. An easy way to read the database is to use tools like [DBeaver](https://dbeaver.io/).
 
 ## Monitoring Device Statuses
 On startup, the application checks if every sensor defined in the configuration file can be detected and read from. The same cannot be said about the GPIO connections to the relay. It will be up to you to ensure that all devices connected to the relay are triggerable. The recommended way is to use `relay.py` in the devices folder:

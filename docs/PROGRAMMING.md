@@ -134,6 +134,16 @@ For instruments, some of them have more complicated behaviors. To determine if a
 
 Some instruments require more than just sensor input. For example, the `LightBulb` instrument is controlled by both the light sensor, a light budget, and a daterange in which the instrument can be considered for a certain state. For the last two potenital criterias, we have a `in_timerange` and `update_budget` function. The `update_budget` is only uesd to update the state of the budget. The utilization of the budget is done in `can_schedule` if a budget is defined.
 
+## Logging System
+
+The main method of logging events, metadata, and heartbeats for the application is done through a SQLite database. At the beginning of the application, we do a check to see if the database file exists, and if not, generate one based off a schema string defined in the `generate_schema` function in `database.py`. The database is broken down into the following tables:
+
+- **`logs`**: intended to store a sensor reading or an instrument's triggering
+- **`images`**: since capturing images is special, we generate an entry composed of a timestamp and the image path/name.    
+- **`events`**: when the main loop has executed, we generate a "heartbeat", which is only composed of an ID and a timestamp 
+
+A set of helper classes are defined in `database.py` to assist with the connection (ex: `SQLiteAPI`), transactions (ex: `DatabaseHandler`), and handling entry class types (ex: `ImageRecord`, `LogRecord`). `DatabaseHandler` is the primary class that triggers the recording of data into a respective table in the main loop.
+
 ## Main Loop
 
 > [!NOTE]  

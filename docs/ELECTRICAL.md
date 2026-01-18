@@ -70,3 +70,15 @@ Reference the pin layout for the Raspbeery Pi 5:
 1. Route all sensor wires through the side-hole of the electronics enclosure
 2. Plug each sensor wire's JST end into the ports of the PCA9548.
 3. Assuming that the RPi5 is powered and is properly connected to the PCA9548, run `i2cdetect -y 1` to check if the multiplexer is picked up. Utilize `devices/multiplexer.py` to see each device that is connected to multiplexer
+
+## Connector Types
+
+We have two distinct kinds of wire connections - JST SH SMD 1.0mm and JST 
+
+## Extending Connectors
+
+Many DIY hobbyist-level sensors, like the ones we're using in this project, typically come with relatively short cables. To properly place these sensors around the greenhouse while having them reach the Raspberry Pi 5 in the electronics enclosure, we sometimes have to extend the wiring.
+
+For I2C connections, this extension can be tricky sometimes since the connectors are 1mm JST SH and are incredibly difficult to insert and clamp wires into. I have found that buying premade 1mm JST SH male or female connectors from online and doing a 3-way splicing (one-I2C-end <-> any 24+ AWG wire <-> one-I2C-end) is a consistent way of extending the connection of a I2C sensor. There is a major cavaet - sometimes these kinds of extensions can cause unstable connections which cause some sensors to refuse connections, transmit incorrect data, or lose connection intermittently.
+
+For general wire extension or for larger JST connectors, you can simply solder wires together or using a JST-compatible crimping tool to create a continous wire. Always take note of the current for a given device when choosing which wire gauge to utilize. For most of these sensors, a 22 to 28 AWG wire will work, but for something like a 120VAC instrument, you should use something like a 14 to 16 AWG wire. 

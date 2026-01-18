@@ -76,3 +76,19 @@ Afterwards, slide the top and bottom brackets through the PVC until it is at a d
 > In version 1, access points are just hacky flaps that are supposed to act as tent "flaps". I'm realizing that this is not practical. Future iteraitons will not have this kind of access point.
 
 To create the access points, make a vertical cut in the middle on one of the long side along the middle vertical PVC struct. Then, cut some velcro straps into small segments, and apply one part of each velcro segment to a flap and one to the middle vertical PVC struct.
+
+## Ventilation
+
+> [!CAUTION]  
+> In version 1, fan mounts are too small and adhering the plastic to the fan directly with a bunch of tape is not optimal. Future iterations will change the mount to be larger and more receptive to adhesives. There also should be an attachment that acts as vents to better control the air flow and temperature.
+
+To mount the 120mm fans on to the greenhouse structure, 3D print the fan mounts and attach them to the side opposite of where the power wires route from. Slide the fan mount through one of the PVC pipes until in an optimal position. This part is a little rudimentary, but make a cut out of the fan in the greenhouse plastic. Tape the fan to the plastic sheeting until it is secured.
+
+## Cameras
+
+> [!CAUTION]  
+> In version 1, the cameras are only in a casing and not a mount, so mounting is completely arbritary. This will change in future iterations.
+
+To mount the GC0307, choose a portion of PVC that can confidently hold the camera and the adhesive without the adhesive shifting due to the wire moving.
+
+![Picture of the GC0307 camera and casing taped to a PVC pipe](./images/gc0307_mounted.png)

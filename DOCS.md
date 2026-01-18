@@ -29,3 +29,4 @@ This project has two distinctive licenses - a [CERN OHLv2 Permissive license](ht
 * (10/12/2025) - Added diagrams and more details for WIRING.md
 * (10/19/2025) - Added more pictures and to STRUCTURE.md
 * (12/16/2025) - Added [PRINT.md](./docs/PRINT.md) and more diagrams
+* (1/18/2026) - Edited ELECTRICAL.md and STRUCTURE.md

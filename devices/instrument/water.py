@@ -98,23 +98,23 @@ class WaterPump:
         """
         t1 = time.time()
         # NOTE: Enable once water bucket is filled with water
-        # self.start_pump()
+        self.start_pump()
 
         while True:
-            if period_spacing_sec != -1:
-                if not self.fake_data:
+            #if period_spacing_sec != -1:
+                #if not self.fake_data:
                     # NOTE: Enable once water bucket is filled with water
-                    # self.stop_pump()
+                    #self.stop_pump()
 
-                    time.sleep(period_spacing_sec)
+                    #time.sleep(period_spacing_sec)
                     # NOTE: Enable once water bucket is filled with water
-                    # self.start_pump()
+                    #self.start_pump()
             t2 = time.time()
             if t2-t1 > period_sec:
                 break
 
         # NOTE: Enable once water bucket is filled with water
-        # self.stop_pump()
+        self.stop_pump()
         stop_duration = time.time() - t1
         self.thread_active = False
         self.iteration_on = False

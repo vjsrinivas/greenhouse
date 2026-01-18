@@ -24,40 +24,40 @@
 		},
 		"water_pump": {
 			"type": "water",
-			"duration": 20,
-			"interval_sec": 60
+			"duration": 120,
+			"interval_sec": 28800
 		},
 		"light_1": {
 			"type": "light",
 			"compare": "lt",
-			"sensor_keys": {"lux": 300},
-			"interval_sec": 10
+			"sensor_keys": {"lux": 600},
+			"interval_sec": 28800
 		},
 		"fan_1": {
 			"type": "fan",
-			"duration": 60,
-			"interval_sec": 120,
+			"duration": 1800,
+			"interval_sec": 7200,
 			"compare": "gt",
 			"sensor_keys": {"temperature": 85, "relative_humidity": 60}
 		},
 		"fan_2": {
 			"type": "fan",
-			"duration": 60,
-			"interval_sec": 120,
+			"duration": 1800,
+			"interval_sec": 7200,
 			"compare": "gt",
 			"sensor_keys": {"temperature": 85, "relative_humidity": 60}
 		},
 		"corner_camera_1": {
 			"type": "camera",
 			"usb_id": 0,
-			"interval_sec": 10,
+			"interval_sec": 86400,
 			"save_path": "./camera_data/",
 			"connections": []
 		},
 		"corner_camera_2": {
 			"type": "camera",
 			"usb_id": 2,
-			"interval_sec": 10,
+			"interval_sec": 86400,
 			"save_path": "./camera_data/",
 			"connections": []
 		}
@@ -69,6 +69,6 @@
 		"fan_2": 22
 	},
 	"budgets": {
-		"light_1": {"seconds": 51780, "time_start": "3:00:00 AM", "time_end": "8:30:00 PM"}
+		"light_1": {"seconds": 100000000000000, "time_start": "7:00:00 AM", "time_end": "3:00:00 PM"}
 	}
 }

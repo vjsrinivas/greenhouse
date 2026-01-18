@@ -150,7 +150,7 @@ def initialize_from_config(
                 sensor_threshold=limiters[limiter_key],
                 interval_sec=interval_sec,
                 comparison="less",
-                budget_struct={"seconds": 86400},
+                budget_struct={"seconds": 1e100},
                 accumulation_state=True,
             )
         else:

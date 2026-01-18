@@ -5,6 +5,7 @@ import time
 from typing import *
 
 try:
+    from gpiozero import LED, OutputDevice
     from utils import emoji
 except ImportError:
     pass
@@ -75,6 +76,10 @@ if __name__ == "__main__":
     PIN = args.pin
     relay = OutputDevice(PIN, active_high=False, initial_value=False)
     #relay2 = OutputDevice(27, active_high=False, initial_value=True)
+    
+    relay.on()
+    input()
+
     print(relay.value)
     if args.on:
         relay.on()

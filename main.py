@@ -116,7 +116,16 @@ def initialize_from_config(
         elif dev_type == "camera":
             camera_id = device["usb_id"]
             save_path = device["save_path"]
-            interval_sec = device["interval_sec"]
+            if "interval_sec" in device:
+                interval_sec = device["interval_sec"]
+                scheduler_obj = SensorScheduler(interval_sec=interval_sec)
+            elif "datetime_str" in device:
+                datetime_str = device["datetime_str"]
+                datetime_obj = datetime.strptime(datetime_str, "%y-%m-%d_%H-%M-%S")
+                scheduler_obj = SensorScheduler(datetime_obj=datetime_obj)
+            else:
+                raise ValueError("Must have interval_sec or datetime_str")
+
             device_obj = GC0307(
                 camera_id,
                 dev,
@@ -125,7 +134,6 @@ def initialize_from_config(
                 fake_data=fake_data,
             )
             device_type = "sensor"
-            scheduler_obj = SensorScheduler(interval_sec=interval_sec)
 
         elif dev_type == "fan":
             device_type = "device"
@@ -303,6 +311,7 @@ if __name__ == "__main__":
                     # Read sensor data
                     sensor_dict = device_obj()
 
+                    logger.info(f"Captured sensor data from {device_name} | group: {device.type}")
                     # log sensor data:
                     if device.type != "camera":
                         record = LogRecord(
@@ -368,9 +377,11 @@ if __name__ == "__main__":
                             db_handler.log(record)
                         else:
                             # if loop_iteration % logging_iteration == 0 or _dev.run_alone:
+                            """
                             logger.warning(
                                 "{} scheduler is not ready to be polled!".format(_conn)
                             )
+                            """
 
         # Run through any instrument scheduler that is on an iterative timer (no sensor attached)
         for instrument_name, instrument in instrument_tree.items():
@@ -407,12 +418,15 @@ if __name__ == "__main__":
                         )
                         db_handler.log(record)
                     else:
+                        pass
+                        """
                         if loop_iteration % logging_iteration == 0:
                             logger.warning(
                                 "(Iterative) {} scheduler is not ready to be polled!".format(
                                     instrument_name
                                 )
                             )
+                        """
 
         time.sleep(1)  # tick every 1 second
 

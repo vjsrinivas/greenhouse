@@ -27,17 +27,40 @@ class Scheduler(ABC):
 
 # Generic sensor scheduler:
 class SensorScheduler(Scheduler):
-    def __init__(self, interval_sec=10):
+    def __init__(self, interval_sec=None, datetime_obj:datetime=None):
+        self.datetime_obj = datetime_obj
+        self.already_triggered = False
+        self.timeout_secs = 120
         super().__init__(interval_sec)
-
+ 
     def can_schedule(self) -> bool:
-        current_time = time.time()
-        delta = current_time - self.last_interval
-        if delta >= self.interval_sec:
-            self.last_interval = current_time
-            return True
+        if self.datetime_obj is not None:
+            # Doing can_schedule with datetime rather than time.time:
+            current_datetime_obj = datetime.now()
+            dto_hour = self.datetime_obj.hour
+            dto_min = self.datetime_obj.minute
+            dto_sec = self.datetime_obj.second
+
+            cdo_hour = current_datetime_obj.hour
+            cdo_min = current_datetime_obj.minute
+            cdo_sec = current_datetime_obj.second
+            
+            if (cdo_hour == dto_hour) and (cdo_min == dto_min):
+                if self.already_triggered:
+                    return False
+                self.already_triggered = True
+                return True
+            else:
+                self.already_triggered = False
+                return False
         else:
-            return False
+            current_time = time.time()
+            delta = current_time - self.last_interval
+            if delta >= self.interval_sec:
+                self.last_interval = current_time
+                return True
+            else:
+                return False
 
 
 # Generic device scheduler:

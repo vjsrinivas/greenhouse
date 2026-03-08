@@ -42,7 +42,7 @@
 		},
 		"fan_2": {
 			"type": "fan",
-			"duration": 1800,
+			"duration": 1800,	
 			"interval_sec": 7200,
 			"compare": "gt",
 			"sensor_keys": {"temperature": 85, "relative_humidity": 60}
@@ -50,14 +50,14 @@
 		"corner_camera_1": {
 			"type": "camera",
 			"usb_id": 0,
-			"interval_sec": 86400,
+			"datetime_str": "01-01-01_12-00-00",
 			"save_path": "./camera_data/",
 			"connections": []
 		},
 		"corner_camera_2": {
 			"type": "camera",
 			"usb_id": 2,
-			"interval_sec": 86400,
+			"datetime_str": "01-01-01_12-00-00",
 			"save_path": "./camera_data/",
 			"connections": []
 		}

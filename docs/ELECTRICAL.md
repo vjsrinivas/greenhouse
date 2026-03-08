@@ -73,12 +73,12 @@ Reference the pin layout for the Raspbeery Pi 5:
 
 ## Connector Types
 
-We have two distinct kinds of wire connections - JST SH SMD 1.0mm and JST 
+We have two distinct kinds of wire connections - [JST SH 1.0mm](https://www.jst.com/products/crimp-style-connectors-wire-to-board-type/sh-connector/) and [JST PH 2.0mm](https://www.jst.com/products/crimp-style-connectors-wire-to-board-type/ph-connector/). The former is almost exclusively used for I2C sensors while the latter has sparse usage in some of the sensors and instruments. It is quite difficult to put together a JST SH 1mm connection, but a JST PH 2mm connection can be made with a JST-compatiable crimping tool, JST PH 2.0mm male/female connectors, and 22-24 AWG wire.
 
 ## Extending Connectors
 
 Many DIY hobbyist-level sensors, like the ones we're using in this project, typically come with relatively short cables. To properly place these sensors around the greenhouse while having them reach the Raspberry Pi 5 in the electronics enclosure, we sometimes have to extend the wiring.
 
-For I2C connections, this extension can be tricky sometimes since the connectors are 1mm JST SH and are incredibly difficult to insert and clamp wires into. I have found that buying premade 1mm JST SH male or female connectors from online and doing a 3-way splicing (one-I2C-end <-> any 24+ AWG wire <-> one-I2C-end) is a consistent way of extending the connection of a I2C sensor. There is a major cavaet - sometimes these kinds of extensions can cause unstable connections which cause some sensors to refuse connections, transmit incorrect data, or lose connection intermittently.
+For I2C connections, this extension can be tricky sometimes since the connectors are JST SH 1.0mm and are incredibly difficult to insert and clamp wires into. I have found that buying premade JST SH 1.0mm male or female connectors from online and doing a 3-way splicing (one-I2C-end <-> any 24+ AWG wire <-> one-I2C-end) is a consistent way of extending the connection of a I2C sensor. There is a major cavaet - sometimes these kinds of extensions can cause unstable connections which cause some sensors to refuse connections, transmit incorrect data, or lose connection intermittently.
 
 For general wire extension or for larger JST connectors, you can simply solder wires together or using a JST-compatible crimping tool to create a continous wire. Always take note of the current for a given device when choosing which wire gauge to utilize. For most of these sensors, a 22 to 28 AWG wire will work, but for something like a 120VAC instrument, you should use something like a 14 to 16 AWG wire. 
